@@ -52,23 +52,7 @@
 		return str_replace($marTViet,$marKoDau,$cs);
 		 
 	}
-	// Check error for 
-	function check_error_baihoc(array $errors){
 
-		if(in_array('name',$errors)){
-				echo "<div class='alert alert-warning'>Bạn chưa nhập tên bài viết ! .</div>";
-		}else if(in_array('title',$errors)){
-				echo "<div class='alert alert-warning'>Bạn chưa nhập title cho bài viết .</div>";
-		}else if(in_array('loaibai_id',$errors)){
-				echo "<div class='alert alert-warning'>Bạn chưa chọn thể loại bài viết .</div>";
-		}else if(in_array('name_available',$errors)){
-				echo "<div class='alert alert-warning'>Đã có một bài viết trùng tên .</div>";
-		}else if(in_array('des',$errors)){
-				echo "<div class='alert alert-warning'>Bạn chưa nhập mô tả cho bài viết .</div>";
-		}else if(in_array('keyword',$errors)){
-				echo "<div class='alert alert-warning'>Bạn chưa nhập keyword cho bài viết .</div>";
-		}
-	}
 	function check_error_pages(array $errors){
 		if(in_array('name',$errors)){
 				echo "<div class='alert alert-warning'>Bạn chưa nhập tên bài viết .</div>";
@@ -116,29 +100,7 @@
 		}
 	}
 	
-	function upload_images(array $file){
-		if(isset($file)){
-			$allowed=array('image/ipg','image/png','image/x-png','image/jpeg');
 
-			if(in_array(strtolower($file['type']), $allowed)){
-					$ext=explode('.',$file['name']);
-					$ext=end($ext);
-					$renamed=uniqid(rand(),true).'.'."$ext";
-					if(!move_uploaded_file($file['tmp_name'],"bootstrap/images/".$renamed)){
-						$message="Upload_un_success";
-					}else{
-						$message=$renamed;
-					}
-				
-			}else{
-				$message="loi_dinh_dang";
-			}
-		}
-		if(isset($file['tmp_name']) && is_file($file['tmp_name']) && file_exists($file['tmp_name'])){
-			unlink($file['tmp_name']);
-		}
-		return $message;
-	}
 	function upload(array $file){
 		$allowedExts1 = array("jpg","jpeg","gif", "png");
 		$allowedExts2 = array("mp3", "mp4", "wma");
@@ -176,38 +138,5 @@
 		}
 		return $message;
 	}
-	function check_error_upimage($error){
-		$errors=null;
-		if($error>0){
-			switch ($error) {
-				case 1:
-					$errors="<div class='alert alert-warning'><strong>Error </strong>File vượt quá kích thước cho phép .</div>";
-					break;
-				case 2:
-					$errors="<div class='alert alert-warning'><strong>Error </strong>File vượt quá kích thước cho phép .</div>";
-					break;
-				case 3:
-					$errors="<div class='alert alert-warning'><strong>Error </strong>File đã upload được 1 nửa .</div>";
-					break;
-				case 4:
-					$errors="<div class='alert alert-warning'><strong>Error </strong>Không có file nào được chọn .</div>";
-					break;
-				case 6:
-					$errors="<div class='alert alert-warning'><strong>Error </strong>Foder không tôn tại .</div>";
-					break;
-				case 7:
-					$errors="<div class='alert alert-warning'><strong>Error </strong>Không thể viết vào ổ đĩa .</div>";
-					break;
-				case 8:
-					$errors="<div class='alert alert-warning'><strong>Error </strong>File đã bị dừng lại .</div>";
-					break;
-				
-				default:
-					$errors="<div class='alert alert-warning'><strong>Error </strong>Hệ thống bị lỗi .</div>";
-					break;
-			}
-		}
-		return $errors;
-
-	}
+	
 ?>
