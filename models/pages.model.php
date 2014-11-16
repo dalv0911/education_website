@@ -5,7 +5,7 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT name,id FROM menu";
+			$sql="SELECT distinct name,id FROM menu";
 			$stmt=self::$conn->query($sql);
 			$i=0;
 			$menu=array(array());
@@ -19,7 +19,7 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT name,id,menu_id FROM thumuc";
+			$sql="SELECT distinct name,id,menu_id FROM thumuc";
 			$stmt=self::$conn->query($sql);
 			$i=0;
 			$thumuc=array(array());
@@ -33,7 +33,7 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT name,id,thumuc_id FROM thumuc2";
+			$sql="SELECT distinct name,id,thumuc_id FROM thumuc2";
 			$stmt=self::$conn->query($sql);
 			$i=0;
 			$thumuc2=array(array());
@@ -43,12 +43,83 @@
 			$i--;
 			return $thumuc2;
 		}
+		public function getMenuById($page_id){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT distinct menu_id FROM page_menu WHERE page_id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$page_id);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$page_menu=$stmt->fetch();
+			return $page_menu;
+		}
+		public function getThuMucById($page_id){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT distinct thumuc_id FROM page_thumuc WHERE page_id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$page_id);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$page_thumuc=$stmt->fetch();
+			return $page_thumuc;
+		}
+		public function getThuMuc2ById($page_id){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT distinct thumuc2_id FROM page_thumuc2 WHERE page_id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$page_id);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$page_thumuc2=$stmt->fetch();
+			return $page_thumuc2;
+		}
 		public function create(array $pages){
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
 			$sql="INSERT INTO pages(name,title,content,url,des,keyword,meta,image_icon,mp3,author_id,time_on)
 							 VALUES(?,?,?,?,?,?,?,?,?,?,NOW())";
+			$stmt=self::$conn->prepare($sql);
+
+			$stmt->bindParam(1,$name);
+			$stmt->bindParam(2,$title);
+			$stmt->bindParam(3,$content);
+			$stmt->bindParam(4,$url);
+			$stmt->bindParam(5,$des);
+			$stmt->bindParam(6,$keyword);
+			$stmt->bindParam(7,$meta);
+			$stmt->bindParam(8,$image_icon);
+			$stmt->bindParam(9,$mp3);
+			$stmt->bindParam(10,$author_id);
+
+			$name=$pages['name'];
+			$title=$pages['title'];
+			$content=$pages['content'];
+			$url=$pages['url'];
+			$des=$pages['des'];
+			$keyword=$pages['keyword'];
+			$meta=$pages['meta'];
+			$image_icon=$pages['image_icon'];
+			$author_id=$pages['author_id'];
+			$mp3=$pages['mp3'];
+
+			if($stmt->execute()){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function edit(array $pages){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="UPDATE pages SET name=?,title=?,content=?,url=?,des=?,keyword=?,meta=?,image_icon=?,mp3=?,author_id=?,time_on=NOW()";
 			$stmt=self::$conn->prepare($sql);
 
 			$stmt->bindParam(1,$name);
@@ -94,6 +165,22 @@
 				return false;
 			}
 		}
+		public function delete_page_menu($page_id){
+			// Connect to database ...
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+
+			$stmt=self::$conn->prepare('DELETE FROM page_menu WHERE page_id=?');
+
+			$stmt->bindParam(1,$page_id);
+
+			if($stmt->execute()){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		public function insert_page_thumuc($page_id,$thumuc_id){
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
@@ -102,6 +189,22 @@
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$page_id);
 			$stmt->bindParam(2,$thumuc_id);
+
+			if($stmt->execute()){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function delete_page_thumuc($page_id){
+			// Connect to database ...
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+
+			$stmt=self::$conn->prepare('DELETE FROM page_thumuc WHERE page_id=?');
+
+			$stmt->bindParam(1,$page_id);
 
 			if($stmt->execute()){
 				return true;
@@ -124,6 +227,22 @@
 				return false;
 			}
 		}
+		public function delete_page_thumuc2($page_id){
+			// Connect to database ...
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+
+			$stmt=self::$conn->prepare('DELETE FROM page_thumuc2 WHERE page_id=?');
+
+			$stmt->bindParam(1,$page_id);
+
+			if($stmt->execute()){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		public function getPageId($name){
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
@@ -136,5 +255,57 @@
 			$row=$stmt->fetch();
 			return $row['id'];
 		}
+		public function getPages($id){
+			// Connect to database ...
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT 
+							CONCAT_WS(' ',first_name,last_name) AS user_name,
+							name,title,url,content,p.des,keyword,
+							meta,image_icon,p.time_on,mp3
+					FROM pages AS p 
+					LEFT JOIN users AS u
+						ON u.id=p.author_id
+					WHERE p.id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$id);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			if($row=$stmt->fetch()){
+				return $row;
+			}else{
+				return null;
+			}
+		}
+		public function delete($id){
+			// Connect to database ...
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+
+			$stmt=self::$conn->prepare('DELETE FROM pages WHERE id=?');
+
+			$stmt->bindParam(1,$id);
+
+			if($stmt->execute()){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function getPageById($id){
+	 		// Connect to database ..
+	 		if(empty(self::$conn)){
+	 			self::$conn=$this->connect_pdo();
+	 		}
+	 		$sql="SELECT name,id FROM pages WHERE id=?";
+	 		$stmt=self::$conn->prepare($sql);
+	 		$stmt->bindParam(1,$id);
+	 		$stmt->execute();
+	 		$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	 		$row=$stmt->fetch();
+	 		return $row;
+	 	}
 	}
 ?>

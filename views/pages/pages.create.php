@@ -41,17 +41,18 @@
 										echo "<option value='".(100+$menu[$i]['id'])."' selected>".$menu[$i]['name']."</option>";
 									}else echo "<option value='".(100+$menu[$i]['id'])."'>".$menu[$i]['name']."</option>";
 									$j=0;
-									while(isset($thumuc[$j]) && !empty($thumuc[$j])){
+									while(isset($thumuc[$j]['id']) && !empty($thumuc[$j]['id'])){
 										if($menu[$i]['id']==$thumuc[$j]['menu_id']){
 											echo "<option value='".(1000+$thumuc[$j]['id'])."'> ---".$thumuc[$j]['name']."</option>";
-										}
-										$k=0;
-										while(isset($thumuc2[$k]) &&!empty($thumuc2[$k])){
-											if($thumuc[$j]['id']==$thumuc2[$k]['thumuc_id']){
-												echo "<option value='".(10000+$thumuc2[$k]['id'])."'> ------".$thumuc2[$k]['name']."</option>";
+											$k=0;
+											while(isset($thumuc2[$k]['id']) &&!empty($thumuc2[$k]['id'])){
+												if($thumuc[$j]['id']==$thumuc2[$k]['thumuc_id']){
+													echo "<option value='".(10000+$thumuc2[$k]['id'])."'> ------".$thumuc2[$k]['name']."</option>";
+												}
+												$k++;
 											}
-											$k++;
 										}
+										
 										$j++;
 									}
 									$i++;

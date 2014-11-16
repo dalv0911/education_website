@@ -34,8 +34,9 @@
 				<form role="form" method="post">
 					<div>
 						<label>Menu Name</label>
-						<input class="form-group" placeholder="Enter text "name="name"
-							value="<?php if(isset($menu['name'])) echo$menu['name'];?>">
+						<input class="form-group" placeholder="Enter text " id="menu_name" name="name"
+							value="<?php if(isset($menu['name'])) echo $menu['name'];?>">
+						<i id="ajax_notify"></i>
 					</div>
 					<div>
 						<label>Position</label>

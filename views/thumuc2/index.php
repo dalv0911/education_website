@@ -51,6 +51,7 @@
             				}
             			?>
             			<?php
+                            $i=0;
                             while(!empty($pages[$i])){
                                 echo "<tr>";
                                     echo"<td><a href='?rt=pages&id=".$pages[$i]['id']."'>".$pages[$i]['name']."</a></td>";
