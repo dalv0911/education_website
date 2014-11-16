@@ -20,6 +20,8 @@
     <script src="../bootstrap/js/plugins/morris/raphael.min.js"></script>
     <script src="../bootstrap/js/plugins/morris/morris.min.js"></script>
     <script src="../bootstrap/js/plugins/morris/morris-data.js"></script>
+    <script src="../js/check_ajax.js" type="text/javascript"></script>
+    <script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
