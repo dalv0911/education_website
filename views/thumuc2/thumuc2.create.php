@@ -3,7 +3,7 @@
 ?>
 			<?php
 				if(!empty($errors)){
-					check_for_thumuc($errors);
+					check_for_thumuc2($errors);
 				}
 				if(isset($message)){
 					echo $message;
@@ -18,31 +18,10 @@
 						<div>
 							<label class="col-md-3">Tên thư mục</label>
 							<div>
-								<input class="form-group" placeholder="Enter text " id="name_thumuc" name="name" value="<?php
+								<input class="form-group" placeholder="Enter text " id="name_thumuc2" name="name" value="<?php
 									echo isset($_POST['name'])?$_POST['name']:'';?>">
 								<i id="ajax_notify"></i>
 							</div>
-						</div>
-						<div>
-							<label class="col-md-3">Menu</label>
-							<select class="form-group" name="menu_id">
-								<option value="">Select Option</option>
-								<?php
-									if(isset($menu)){
-										$i=0;
-										while($menu[$i]!=null){
-											if($menu[$i]['id']==$_POST['menu_id']){
-												echo "<option value='".$menu[$i]['id']."' selected>".$menu[$i]['name']."</option>";
-											}else{
-												echo "<option value='".$menu[$i]['id']."'>".$menu[$i]['name']."</option>";
-											}
-											$i++;
-										}
-									}else{
-										echo "<option value=1>1</option>";
-									}
-								?>
-							</select>
 						</div>
 						<div>
 							<label class="col-md-3">Position</label>

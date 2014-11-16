@@ -1,5 +1,5 @@
 <?php
-	define('BASE_URL','http://localhost/mvc/');
+	define('BASE_URL','http://localhost/education_website/');
 	function redirect_to($page="index.php"){
 		$url=BASE_URL.$page;
 		header("Location:$url");
@@ -52,7 +52,24 @@
 		return str_replace($marTViet,$marKoDau,$cs);
 		 
 	}
-
+	function check_for_thumuc(array $errors){
+		if(in_array('name',$errors)){
+				echo "<div class='alert alert-warning'>Bạn chưa nhập tên thư mục.</div>";
+		}else if(in_array('menu_id',$errors)){
+				echo "<div class='alert alert-warning'>Bạn chưa chọn menu .</div>";
+		}else if(in_array('position',$errors)){
+				echo "<div class='alert alert-warning'>Bạn chưa chọn vị trí cho bài viết .</div>";
+		}
+	}
+	function check_for_thumuc2(array $errors){
+		if(in_array('name',$errors)){
+				echo "<div class='alert alert-warning'>Bạn chưa nhập tên thư mục.</div>";
+		}else if(in_array('thumuc_id',$errors)){
+				echo "<div class='alert alert-warning'>Bạn chưa chọn thư mục cha .</div>";
+		}else if(in_array('position',$errors)){
+				echo "<div class='alert alert-warning'>Bạn chưa chọn vị trí cho bài viết .</div>";
+		}
+	}
 	function check_error_pages(array $errors){
 		if(in_array('name',$errors)){
 				echo "<div class='alert alert-warning'>Bạn chưa nhập tên bài viết .</div>";
@@ -77,14 +94,14 @@
 	// check error for form register
 	function check_error_register(array $errors){
 		if(in_array('email',$errors)){
-			echo "<div class='alert alert-warning'>Bạn chưa điền email !<strong>Đây là một trường bắt buộc</strong></div>";
+			echo "<div class='alert alert-warning'><strong>Email của bạn không hợp lệ !</strong></div>";
 		}elseif(in_array('password',$errors)){
 			echo "<div class='alert alert-warning'>Bạn chưa nhập password ! <strong>Đây là một trường bắt buộc</strong></div>";
 		}elseif(in_array('re-password',$errors)){
 			echo "<div class='alert alert-warning'>Bạn chưa nhập re-password ! <strong>Đây là một trường bắt buộc</strong></div>";
 		}elseif(in_array('wrong-pass',$errors)){
 			echo "<div class='alert alert-warning'>Password không khớp ! Vui lòng thử lại</div>";
-		}else if(in_array('username_is_available',$errors)){
+		}else if(in_array('email_is_available',$errors)){
 			echo "<div class='alert alert-warning'>Email đã tồn tại ... Bạn không thể đăng kí với Email này .</div>";
 		}
 	}
@@ -112,11 +129,11 @@
 		    {
 		    	$message="<div class='alert alert-warning'>Return Code: ".$file["error"]."</div><br />";
 		    }else{
-		    	if (file_exists("data/images/".$file["name"]))
+		    	if (file_exists("upload/images/".$file["name"]))
 		      	{
 		        	$message="<div class='alert alert-warning'>".$file["name"]." already exists. </div>";
 		      	}else{
-		       		move_uploaded_file($file["tmp_name"],"data/images/".$file["name"]);
+		       		move_uploaded_file($file["tmp_name"],"upload/images/".$file["name"]);
 		       		$message="success";
 		      	}
 		    }
@@ -125,11 +142,11 @@
 		    {
 		    	$message= "<div class='alert alert-warning'>Return Code: ".$file["error"]."</div><br />";
 		    }else{
-		    	if (file_exists("data/mp3/".$file["name"]))
+		    	if (file_exists("upload/mp3/".$file["name"]))
 		      	{
 		        	$message= "<div class='alert alert-warning'>".$file["name"]." already exists. </div>";
 		      	}else{
-		       		move_uploaded_file($file["tmp_name"],"data/mp3/".$file["name"]);
+		       		move_uploaded_file($file["tmp_name"],"upload/mp3/".$file["name"]);
 		       		$message="success";
 		      	}
 		    }
@@ -139,4 +156,3 @@
 		return $message;
 	}
 	
-?>

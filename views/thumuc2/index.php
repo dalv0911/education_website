@@ -13,16 +13,23 @@
             		</thead>
             		<tbody>
                         <?php
-                            if(!empty($menu_detail['name'])){
+                            if(!empty($BreadCrumb['menu_name'])){
                                 echo "
                                     <ol class='breadcrumb'>
                                         <li>
-                                            <i class='glyphicon glyphicon-th-large'></i><a href='?rt=menu&id=".$menu_detail['id']."'> ".$menu_detail['name']."</a>
+                                            <i class='glyphicon glyphicon-th-large'></i><a href='?rt=menu&id=".$BreadCrumb['menu_id']."'> ".$BreadCrumb['menu_name']."</a>
                                         </li>";
-                                        if(!empty($thumuc['name'])){
+                                        if(!empty($BreadCrumb['thumuc_name'])){
+                                            echo "
+                                                <li>
+                                                    <i class='glyphicon glyphicon-stats'></i><a href='?rt=thumuc&id=".$BreadCrumb['thumuc_name']."'>".$BreadCrumb['thumuc_name']."
+                                                 </li>
+                                            ";
+                                        }
+                                        if(!empty($BreadCrumb['thumuc2_menu'])){
                                             echo "
                                                 <li class='active'>
-                                                    <i class='glyphicon glyphicon-stats'></i> ".$thumuc['name']."
+                                                    <i class='glyphicon glyphicon-stats'>".$BreadCrumb['thumuc2_name']."
                                                  </li>
                                             ";
                                         }
@@ -38,28 +45,12 @@
                                                 <li>
                                                     <a href="?rt=pages/create" title="Viết bài mới"><span class="glyphicon glyphicon-pencil"></span>Viết bài mới</a>
                                                 </li>
-                                                <li>
-                                                    <a href="?rt=thumuc2/create&thumuc_id='.$thumuc['id'].'" title="Thư mục mới"><span class="glyphicon glyphicon-plus"></span>Thư mục mới</a>
-                                                </li>
                                             </ul>
                                         </li>
                                     </tr>';
             				}
             			?>
             			<?php
-            			 	$i=0;
-            			 	while(!empty($thumuc2[$i])){
-            			 		echo "<tr>";
-            			 			echo"<td><a href='?rt=thumuc2&id=".$thumuc2[$i]['id']."'>".$thumuc2[$i]['name']."</a></td>";
-            			 			if(isset($_SESSION['level']) && $_SESSION['level']==3){
-	            						echo "<td><a href='?rt=thumuc2/edit&id={$thumuc2[$i]["id"]}' title='Sửa'><span class='glyphicon glyphicon-edit'></span</a></td>
-	            							<td><a href='?rt=thumuc2/delete&id={$thumuc2[$i]["id"]}' title='Xóa'><span class='glyphicon glyphicon-trash'></span</a></td>
-	            							";
-            						}
-            			 		echo "</tr>";
-            			 		$i++;
-            			 	}
-                            $i=0;
                             while(!empty($pages[$i])){
                                 echo "<tr>";
                                     echo"<td><a href='?rt=pages&id=".$pages[$i]['id']."'>".$pages[$i]['name']."</a></td>";

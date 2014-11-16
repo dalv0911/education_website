@@ -229,3 +229,17 @@ border-color: #e7e7e7;
 .navbar-default .navbar-nav>li>a {
 color: #CCC;
 }
+.login_buttom{
+background: #52A20B;
+width: 84px;
+display: inline-block;
+padding-left: 32px;
+}
+.avai{
+    color:#5cb85c;
+    font-weight: bold;
+}
+.not-avai{
+    color:#F90A18;
+    font-weight: bold;
+}

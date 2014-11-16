@@ -4,7 +4,7 @@
 <?php
 	class indexController extends Controller{
 		public function index(){
-			if(!isset($_SESSION['user_id'])){
+			if(!isset($_SESSION['id'])){
 	    		redirect_to('index.php?rt=login');
 	    	}
 			$this->registry->template->title="This is title of my website";

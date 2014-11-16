@@ -18,23 +18,23 @@
 						<div>
 							<label class="col-md-3">Tên thư mục</label>
 							<div>
-								<input class="form-group" placeholder="Enter text " id="name_thumuc" name="name" value="<?php
-									echo isset($_POST['name'])?$_POST['name']:'';?>">
+								<input class="form-group" placeholder="Enter text " name="name" value="<?php
+									echo isset($_POST['name'])?$_POST['name']:$thumuc2['name'];?>">
 								<i id="ajax_notify"></i>
 							</div>
 						</div>
 						<div>
-							<label class="col-md-3">Menu</label>
-							<select class="form-group" name="menu_id">
+							<label class="col-md-3">Thư mục cha</label>
+							<select class="form-group" name="thumuc_id">
 								<option value="">Select Option</option>
 								<?php
-									if(isset($menu)){
+									if(isset($thumuc)){
 										$i=0;
-										while($menu[$i]!=null){
-											if($menu[$i]['id']==$_POST['menu_id']){
-												echo "<option value='".$menu[$i]['id']."' selected>".$menu[$i]['name']."</option>";
+										while($thumuc[$i]!=null){
+											if($thumuc[$i]['id']==$_POST['thumuc_id']){
+												echo "<option value='".$thumuc[$i]['id']."' selected>".$thumuc[$i]['name']."</option>";
 											}else{
-												echo "<option value='".$menu[$i]['id']."'>".$menu[$i]['name']."</option>";
+												echo "<option value='".$thumuc[$i]['id']."'>".$thumuc[$i]['name']."</option>";
 											}
 											$i++;
 										}
@@ -51,7 +51,7 @@
 								<?php
 									if(isset($max_position)){
 										for($i=1;$i<=$max_position+1;$i++){
-											if($i==$_POST['position']){
+											if($i==$_POST['position'] || $i==$thumuc2['position']){
 												echo "<option values='{$i}' selected>".$i."</option>";
 											}else{
 												echo "<option values='{$i}'>".$i."</option>";

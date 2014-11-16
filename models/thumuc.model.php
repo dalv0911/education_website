@@ -1,28 +1,51 @@
 <?php
-	class menuModel extends LoadSiteModel{
+	class thumucModel extends LoadSiteModel{
 		private static $conn=null;
-		public function getThuMucByMenu($menu_id){
+		public function getPages($thumuc_id){
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT id,name FROM thumuc WHERE menu_id=?";
+			$sql="SELECT p.id,p.name 
+					FROM pages AS p LEFT JOIN page_thumuc AS ptm
+						ON p.id=ptm.page_id 
+					WHERE ptm.thumuc_id =?";
 			$stmt=self::$conn->prepare($sql);
-			$stmt->bindParam(1,$menu_id);
+			$stmt->bindParam(1,$thumuc_id);
 			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$i=0;
-			$thumuc=array(array());
+			$pages=array(array());
 			while($row=$stmt->fetch()){
-				$thumuc[$i++]=$row;
+				$pages[$i++]=$row;
 			}
 			$i--;
-			return $thumuc;
+			return $pages;
+		}
+		public function getThuMuc2($thumuc_id){
+			// Connect to database ...
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT distinct name,id
+					FROM thumuc2
+				    WHERE thumuc_id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$thumuc_id);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$i=0;
+			$thumuc2=array(array());
+			while($row=$stmt->fetch()){
+				$thumuc2[$i++]=$row;
+			}
+			$i--;
+			return $thumuc2;
 		}
 		public function getThuMucById($id){
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT name,position,menu_id FROM thumuc WHERE id=?";
+			$sql="SELECT id,name,position,menu_id FROM thumuc WHERE id=?";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$id);
 			$stmt->execute();
@@ -30,31 +53,20 @@
 			$thumuc=$stmt->fetch();
 			return $thumuc;
 		}
-		public function getMenuById($id){
+		public function getMenuByThuMucId($thumuc_id){
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT id,name FROM menu WHERE id=?";
+			$sql="SELECT mn.id,mn.name 
+				FROM thumuc AS tm LEFT JOIN menu AS mn 
+			 		ON tm.menu_id=mn.id 
+			 	WHERE tm.id=?";
 			$stmt=self::$conn->prepare($sql);
-			$stmt->bindParam(1,$id);
+			$stmt->bindParam(1,$thumuc_id);
 			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$menu=$stmt->fetch();
 			return $menu;
-		}
-		public function getPosition(){
-			// Connect to database ....	
-			if(empty(self::$conn)){
-				self::$conn=$this->connect_pdo();
-			}
-			$stmt=self::$conn->query('SELECT position FROM thumuc ORDER BY position DESC LIMIT 1');
-			$stmt->execute();
-			$stmt->setFetchMode(PDO::FETCH_BOTH);
-			if(!$row=$stmt->fetch()){
-				$row['position']=0;
-			}
-			return $row['position'];
-
 		}
 		public function create(array $thumuc){
 			// Connect to database ...
@@ -80,6 +92,20 @@
 			}else{
 				return false;
 			}
+		}
+		public function getPosition(){
+			// Connect to database ....	
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$stmt=self::$conn->query('SELECT position FROM thumuc ORDER BY position DESC LIMIT 1');
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_BOTH);
+			if(!$row=$stmt->fetch()){
+				$row['position']=0;
+			}
+			return $row['position'];
+
 		}
 		public function edit(array $thumuc){
 			// Connect to database ...

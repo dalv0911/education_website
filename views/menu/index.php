@@ -10,11 +10,18 @@
             <div class="table-responsive">
             	<table class="table table-hover table-striped">
             		<thead>
-            			<tr>
-            				<th><?php echo isset($menu_detail['name'])?$menu_detail['name']:'';?></th>
-            			</tr>
             		</thead>
             		<tbody>
+            			<?php
+                            if(isset($menu_detail['name'])){
+                                echo "
+                                    <ol class='breadcrumb'>
+                                        <li>
+                                            <i class='glyphicon glyphicon-th-large'></i><a href='?rt=menu&id=".$menu_detail['id']."'> ".$menu_detail['name']."</a>
+                                        </li>";                                   
+                                    echo "</ol>";
+                            }
+                        ?>
             			<?php
             				if(isset($_SESSION['level']) && $_SESSION['level']==3){
             					echo '<tr>
@@ -25,7 +32,7 @@
                                                     <a href="?rt=pages/create" title="Viết bài mới"><span class="glyphicon glyphicon-pencil"></span>Viết bài mới</a>
                                                 </li>
                                                 <li>
-                                                    <a href="?rt=menu/create" title="Thư mục mới"><span class="glyphicon glyphicon-plus"></span>Thư mục mới</a>
+                                                    <a href="?rt=thumuc/create" title="Thư mục mới"><span class="glyphicon glyphicon-plus"></span>Thư mục mới</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -38,8 +45,8 @@
             			 		echo "<tr>";
             			 			echo"<td><a href='?rt=thumuc&id=".$thumuc[$i]['id']."'>".$thumuc[$i]['name']."</a></td>";
             			 			if(isset($_SESSION['level']) && $_SESSION['level']==3){
-	            						echo "<td><a href='?rt=menu/edit&id={$thumuc[$i]["id"]}' title='Sửa'><span class='glyphicon glyphicon-edit'></span</a></td>
-	            							<td><a href='?rt=menu/delete&id={$thumuc[$i]["id"]}' title='Xóa'><span class='glyphicon glyphicon-trash'></span</a></td>
+	            						echo "<td><a href='?rt=thumuc/edit&id={$thumuc[$i]["id"]}' title='Sửa'><span class='glyphicon glyphicon-edit'></span</a></td>
+	            							<td><a href='?rt=thumuc/delete&id={$thumuc[$i]["id"]}' title='Xóa'><span class='glyphicon glyphicon-trash'></span</a></td>
 	            							";
             						}
             			 		echo "</tr>";

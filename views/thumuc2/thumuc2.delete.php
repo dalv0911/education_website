@@ -7,7 +7,7 @@
 		}
 		if($_SERVER['REQUEST_METHOD']!='POST'){
 			echo "<div class='alert alert-warning'>
-					<strong>Warning !</strong>Bạn chắc chắn muốn xóa <strong>".$thumuc['name']."</strong>
+					<strong>Warning !</strong>Bạn chắc chắn muốn xóa <strong>".$thumuc2['name']."</strong>
 					<br>Nếu bạn chọn Delete thì tất cả các bài viết sau sẽ bị xóa theo .";
 			echo "</div>";
 		}
@@ -22,13 +22,6 @@
         			while(!empty($item_page[$i])){
         				echo "<tr>
         					<td><a href='?rt=pages&id=".$item_page[$i]['id']."'>".$item_page[$i]['name']."</a></td>
-        				</tr>";
-        				$i++;
-        			}
-        			$i=0;
-        			while(!empty($item_thumuc2[$i])){
-        				echo "<tr>
-        					<td><a href='?rt=thumuc2&id=".$item_thumuc2[$i]['id']."'>".$item_thumuc2[$i]['name']."</a></td>
         				</tr>";
         				$i++;
         			}
