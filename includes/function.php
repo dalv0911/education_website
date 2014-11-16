@@ -151,7 +151,7 @@
 		      	}
 		    }
 		}else{
-		  	$message="<div class='alert alert-warning'>Invalid file</div>";
+		  	// $message="<div class='alert alert-warning'>Invalid file</div>";
 		}
 		return $message;
 	}
