@@ -40,5 +40,28 @@
 				}
 			}
 		}
+		public function pages_edit(){
+			$this->check_ajaxModel=new check_ajaxModel();
+			if(isset($_GET['name']) && isset($_GET['id'])){
+				$name=$_GET['name'];
+				$id=$_GET['id'];
+				if($this->check_ajaxModel->check_edit_name_pages($name,$id)){
+					echo "NO";
+				}else{
+					echo "YES";
+				}
+			}
+		}
+		public function menu_name(){
+			$this->check_ajaxModel=new check_ajaxModel();
+			if(isset($_GET['name'])){
+				$name=$_GET['name'];
+				if($this->check_ajaxModel->check_name_menu($name)){
+					echo "NO";
+				}else{
+					echo "YES";
+				}
+			}
+		}
 	}
 ?>

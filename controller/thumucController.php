@@ -16,11 +16,14 @@
 				$this->registry->template->pages=$this->thumucModel->getPages($thumuc_id);
 				$this->registry->template->thumuc2=$this->thumucModel->getThuMuc2($thumuc_id);
 				$this->registry->template->menu_detail=$this->thumucModel->getMenuByThuMucId($thumuc_id);
+				// Load menu bar
+				$this->registry->template->menu=$this->thumucModel->getMenu();
+				// End load menubar
+				$this->registry->template->show("thumuc/index");
+			}else{
+				redirect_to();
 			}
-			// Load menu bar
-			$this->registry->template->menu=$this->thumucModel->getMenu();
-			// End load menubar
-			$this->registry->template->show("thumuc/index");
+			
 		}
 		public function create(){
 			$this->thumucModel=new thumucModel();
@@ -129,10 +132,11 @@
 			}
 		}
 		public function delete(){
-			// Load model ..
-			$this->thumucModel=new thumucModel();
-			// Xử lý form ..
+			
 			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+				// Load model ..
+				$this->thumucModel=new thumucModel();
+				// Xử lý form ..
 				$thumuc_id=$_GET['id'];
 				$thumuc=array();
 				$thumuc=$this->thumucModel->getThuMucById($thumuc_id);
@@ -144,27 +148,30 @@
 					$this->registry->template->title="Deleting ".$thumuc['name'];
 					$this->registry->template->thumuc=$thumuc;
 				}
-			}
-			if($_SERVER['REQUEST_METHOD']=='POST'){
-				if(isset($_POST['delete-radio']) &&$_POST['delete-radio']=="delete"){
-					if($this->thumucModel->delete($thumuc_id)){
-						$message="<div class='alert alert-success'>
-									<strong>Well done !</strong> Bạn đã xóa thành công 
-								</div>";
+				if($_SERVER['REQUEST_METHOD']=='POST'){
+					if(isset($_POST['delete-radio']) &&$_POST['delete-radio']=="delete"){
+						if($this->thumucModel->delete($thumuc_id)){
+							$message="<div class='alert alert-success'>
+										<strong>Well done !</strong> Bạn đã xóa thành công 
+									</div>";
+						}else{
+							$message="<div class='alert alert-warning'>
+										<strong>Error !</strong>Có lỗi xảy ra ... Yêu cầu xóa của bạn không thành công !
+									</div>";
+						}
+						$this->registry->template->message=$message;
 					}else{
-						$message="<div class='alert alert-warning'>
-									<strong>Error !</strong>Có lỗi xảy ra ... Yêu cầu xóa của bạn không thành công !
-								</div>";
+						redirect_to('index.php');
 					}
-					$this->registry->template->message=$message;
-				}else{
-					redirect_to('index.php');
 				}
-			}
 				// Load menu bar
 				$this->registry->template->menu=$this->thumucModel->getMenu();
 				// End load menubar
-			$this->registry->template->show('thumuc/thumuc.delete');
+				$this->registry->template->show('thumuc/thumuc.delete');
+			}else{
+				redirect_to();
+			}
+			
 		}
 	}
 ?>

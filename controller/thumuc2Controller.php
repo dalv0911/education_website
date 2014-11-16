@@ -7,8 +7,20 @@
 		private $thumuc2Model =null;
 		// =========== INDEX ==================
 		public function index(){
-			$this->registry->template->title="";
-			$this->registry->template->show("thumuc2/");
+			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+				$thumuc2_id=$_GET['id'];
+				$this->thumuc2Model=new thumuc2Model();
+				$this->registry->template->pages=$this->thumuc2Model->getPagesOfThuMuc2($thumuc2_id);
+				$thumuc2=$this->thumuc2Model->getThuMuc2ById($thumuc2_id);
+				$this->registry->template->title=$thumuc2['name'];
+					// Load menu bar
+				$this->registry->template->menu=$this->thumuc2Model->getMenu();
+				// End load menubar
+				$this->registry->template->show("thumuc2/index");
+			}else{
+				redirect_to();
+			}
+			
 		}
 		// ==========CREATE ==================
 		public function create(){
@@ -46,15 +58,15 @@
 					}
 					$this->registry->template->errors=$errors;
 				}
-
+						// Load menu bar
+				$this->registry->template->menu=$this->thumuc2Model->getMenu();
+				// End load menubar
+				$this->registry->template->max_position=$this->thumuc2Model->getPosition();
+				$this->registry->template->title="Tạo mới thư mục DA-MVC";
+				$this->registry->template->show('thumuc2/thumuc2.create');
+			}else{
+				redirect_to();
 			}
-
-				// Load menu bar
-			$this->registry->template->menu=$this->thumuc2Model->getMenu();
-			// End load menubar
-			$this->registry->template->max_position=$this->thumuc2Model->getPosition();
-			$this->registry->template->title="Tạo mới thư mục DA-MVC";
-			$this->registry->template->show('thumuc2/thumuc2.create');
 		}
 		public function edit(){
 			if(!isset($_SESSION['level'])|| $_SESSION['level']!=3){
@@ -111,10 +123,10 @@
 			}
 		}
 		public function delete(){
-			// Load model ..
-			$this->thumuc2Model=new thumuc2Model();
-			// Xử lý form ..
 			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+				// Load model ..
+				$this->thumuc2Model=new thumuc2Model();
+				// Xử lý form ..
 				$thumuc2_id=$_GET['id'];
 				$thumuc2=array();
 				$thumuc2=$this->thumuc2Model->getThuMuc2ById($thumuc2_id);
@@ -125,27 +137,29 @@
 					$this->registry->template->title="Deleting ".$thumuc2['name'];
 					$this->registry->template->thumuc2=$thumuc2;
 				}
-			}
-			if($_SERVER['REQUEST_METHOD']=='POST'){
-				if(isset($_POST['delete-radio']) &&$_POST['delete-radio']=="delete"){
-					if($this->thumuc2Model->delete($thumuc2_id)){
-						$message="<div class='alert alert-success'>
-									<strong>Well done !</strong> Bạn đã xóa thành công 
-								</div>";
+				if($_SERVER['REQUEST_METHOD']=='POST'){
+					if(isset($_POST['delete-radio']) &&$_POST['delete-radio']=="delete"){
+						if($this->thumuc2Model->delete($thumuc2_id)){
+							$message="<div class='alert alert-success'>
+										<strong>Well done !</strong> Bạn đã xóa thành công 
+									</div>";
+						}else{
+							$message="<div class='alert alert-warning'>
+										<strong>Error !</strong>Có lỗi xảy ra ... Yêu cầu xóa của bạn không thành công !
+									</div>";
+						}
+						$this->registry->template->message=$message;
 					}else{
-						$message="<div class='alert alert-warning'>
-									<strong>Error !</strong>Có lỗi xảy ra ... Yêu cầu xóa của bạn không thành công !
-								</div>";
+						redirect_to('index.php');
 					}
-					$this->registry->template->message=$message;
-				}else{
-					redirect_to('index.php');
 				}
-			}
 				// Load menu bar
 				$this->registry->template->menu=$this->thumuc2Model->getMenu();
 				// End load menubar
-			$this->registry->template->show('thumuc2/thumuc2.delete');
+				$this->registry->template->show('thumuc2/thumuc2.delete');
+			}else{
+				redirect_to();
+			}
 		}
 	}
 ?>

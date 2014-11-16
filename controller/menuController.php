@@ -12,11 +12,12 @@
 				$menu_id=$_GET['id'];
 				$this->registry->template->thumuc=$this->menuModel->getThuMucByMenu($menu_id);
 				$this->registry->template->menu_detail=$this->menuModel->getMenuById($menu_id);
+				$this->registry->template->pages=$this->menuModel->getPages($menu_id);
+				// Load menu bar
+				$this->registry->template->menu=$this->menuModel->getMenu();
+				// End load menubar
+				$this->registry->template->show("menu/index");
 			}
-			// Load menu bar
-			$this->registry->template->menu=$this->menuModel->getMenu();
-			// End load menubar
-			$this->registry->template->show("menu/index");
 		}
 		
 	}
