@@ -2,7 +2,7 @@
 
 </div>
     <!--  Search -->
-<div class="col-md-3">
+<div class="col-lg-3">
     <div clas="row">
         <div class="input-group">
             <input type="text" class="form-control" name="search">
@@ -13,14 +13,23 @@
     </div>
     <!-- End search -->
     <br>
-    <div class="row">
-        <div class="panel panel-danger">
-            <div class="panel-heading">
-                <h3 class="panel-title">Khuyễn mãi lớp học offline</h3>
-            </div>
-            <div class="panel-body">
-                Giảm :<span style="font-size:25px;color:red">10% học phí</span>
-            </div>
+    <!-- <div class="row"> -->
+        <div class="list-group">
+            <a class="list-group-item active">Thành viên mới đăng kí</a>
+            <?php
+                $i=0;
+                while(isset($users[$i])){
+                    if(!empty($users[$i]['name'])){
+                        echo "<a href='?rt=users&id=".$users[$i]["id"]."' class='list-group-item'>".$users[$i]['name']."</a>";
+                    }else if(!empty($users[$i]['username'])){
+                        echo "<a href='?rt=users&id=".$users[$i]["id"]."' class='list-group-item'>".$users[$i]['username']."</a>";
+                    }else{
+                        echo "<a href='?rt=users&id=".$users[$i]["id"]."' class='list-group-item'>Vô Danh</a>";
+                    }
+                    $i++;
+                }
+            ?>
+            
         </div>
-    </div>
+    <!-- </div> -->
 </div>

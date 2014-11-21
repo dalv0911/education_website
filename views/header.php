@@ -47,6 +47,7 @@
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom CSS -->
         <link href="bootstrap/css/sb-admin.css" rel="stylesheet">
+        <link href="bootstrap/css/damvc.css" rel="stylesheet">
         <!-- Morris Charts CSS -->
         <link href="bootstrap/css/plugins/morris.css" rel="stylesheet">
         <!-- //   <link rel="stylesheet" type="text/css" href="bootstrap/css/full-site.css"> -->
