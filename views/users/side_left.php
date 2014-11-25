@@ -6,7 +6,9 @@
 			<div class="cen">
 				<h2 class="cen"><?php echo isset($users['name'])?$users['name']:'Vô Danh';?></h2>
 				<h3 class="live cen">ONLINE</h3>
-				
+				<?php
+				echo '<img src="upload/avatar/thumb_'.$users['avatar'].'" id="loading-img" />';
+				?>
 				<h4>Thành viên <strong><i style="color:red;">VIP</i></strong></h4>
 				<div>
 					<p><?php echo isset($users['des'])?$users['des']:'';?></p>
@@ -35,17 +37,17 @@
 	    	<?php
 		    	echo'<a href="?rt=users/info&id='.$users['id'].'" class="list-group-item active">Quản lý tài khoản</a>
 		    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-link"></i> Thông tin tài khoản</a>
-		    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-user"></i> Thay đổi hình đại diện</a>
+		    	<a href="?rt=users/gallery&id='.$users['id'].'" class="list-group-item"><i class="glyphicon glyphicon-user"></i> Thay đổi hình đại diện</a>
 		    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-edit"></i> Thay đổi chữ ký</a>
-		    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-cog"></i> Thay đổi mật khẩu</a>';
-	    	?>
+		    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-cog"></i> Thay đổi mật khẩu</a>
+	    	
 	    </div><br>
 	    <div class="list-group">
 	    	<a href="" class="list-group-item active">Bài học của thành viên này</a>
 	    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-heart"></i> Bài học yêu thích</a>
-	    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-time"></i> Lịch sử học tập</a>
-	    </div>
-	    <?php
+	    	<a href="?rt=users/history&id='.$users['id'].'" class="list-group-item"><i class="glyphicon glyphicon-time"></i> Lịch sử học tập</a>
+	    </div>';
+	    
 	    	}
 	    ?>
 	</div>

@@ -50,7 +50,7 @@
 				</div><br>
 				<div>
 					<label class="col-md-3">Ảnh đại diện</label>
-					<input type="file" name="avatar"/><br>
+					<input type="file" name="avatar" id="imageInput"/><br>
 				</div><br>
 				<div>
 					<label class="col-lg-3">Address</label>
@@ -74,7 +74,7 @@
 						?></textarea> 
 				</div><br>
 				<div>
-					<button type="buttom" class="btn btn-lg btn-success col-lg-offset-3" name="submit">Cập nhật thông tin</button>
+					<button type="submit" class="btn btn-lg btn-success col-lg-offset-3" name="submit" id="submit-btn">Cập nhật thông tin</button>
 				</div>
 			</form>
 		</div>

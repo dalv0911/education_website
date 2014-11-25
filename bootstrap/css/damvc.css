@@ -1,0 +1,27 @@
+.action_customer{
+background: #EEF6F8;
+width: 100%;
+border-bottom: 1px solid #DDDDDD;
+float: left;
+padding-bottom: 10px;
+}
+.live{
+font-size: 12px;
+margin: 10px;
+background: url(http://data.tienganh123.com/images/v2/home/pr_arrow_online.png) 70px -1px no-repeat;
+font-weight: normal;
+color: #57970F;
+}
+.avataCus{
+width: 134px;
+height: auto;
+border: 1px solid #ccc;
+margin: 0 30px;
+background: white;
+float: left;
+margin-bottom: 10px;
+min-height: 80px;
+}
+.cen {
+text-align: center;
+}
