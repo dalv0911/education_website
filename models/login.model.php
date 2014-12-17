@@ -7,7 +7,7 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT username,password,level FROM users";
+			$sql="SELECT id,username,password,level FROM users";
 
 			$stmt=self::$conn->query($sql);
 			$users=array(array());

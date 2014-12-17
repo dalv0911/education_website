@@ -16,12 +16,8 @@
 			$stmt->bindParam(1,$thumuc2_id);
 			$stmt->execute();
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
-			$i=0;
-			$BreadCrumb=array(array());
-			while($row=$stmt->fetch()){
-				$BreadCrumb[$i++]=$row;
-			}
-			$i--;
+			$BreadCrumb=array();
+			$BreadCrumb=$stmt->fetch();
 			return $BreadCrumb;
 		}
 		public function getThuMuc($thumuc2_id){

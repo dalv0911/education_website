@@ -13,9 +13,14 @@
 				$this->registry->template->pages=$this->thumuc2Model->getPagesOfThuMuc2($thumuc2_id);
 				$thumuc2=$this->thumuc2Model->getThuMuc2ById($thumuc2_id);
 				$this->registry->template->title=$thumuc2['name'];
+				if(isset($_SESSION['id'])){
+					$this->registry->template->num_notice=$this->thumuc2Model->count_notice($_SESSION['id']);
 					// Load menu bar
+				}
 				$this->registry->template->menu=$this->thumuc2Model->getMenu();
 				// End load menubar
+				$this->registry->template->BreadCrumb=$this->thumuc2Model->getBreadCrumb($thumuc2_id);
+				$this->registry->template->users=$this->thumuc2Model->getNewUsers();
 				$this->registry->template->show("thumuc2/index");
 			}else{
 				redirect_to();
@@ -60,9 +65,11 @@
 				}
 						// Load menu bar
 				$this->registry->template->menu=$this->thumuc2Model->getMenu();
+				$this->registry->template->num_notice=$this->thumuc2Model->count_notice($_SESSION['id']);
 				// End load menubar
 				$this->registry->template->max_position=$this->thumuc2Model->getPosition();
 				$this->registry->template->title="Tạo mới thư mục DA-MVC";
+				$this->registry->template->users=$this->thumuc2Model->getNewUsers();
 				$this->registry->template->show('thumuc2/thumuc2.create');
 			}else{
 				redirect_to();
@@ -114,16 +121,18 @@
 				}
 					// Load menu bar
 				$this->registry->template->menu=$this->thumuc2Model->getMenu();
+				$this->registry->template->num_notice=$this->thumuc2Model->count_notice($_SESSION['id']);
 				// End load menubar
 				$this->registry->template->max_position=$this->thumuc2Model->getPosition();
 				$this->registry->template->title="Sửa thư mục DA-MVC";
+				$this->registry->template->users=$this->thumuc2Model->getNewUsers();
 				$this->registry->template->show('thumuc2/thumuc2.edit');
 			}else{
 				redirect_to();
 			}
 		}
 		public function delete(){
-			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1)) && isset($_SESSION['id'])){
 				// Load model ..
 				$this->thumuc2Model=new thumuc2Model();
 				// Xử lý form ..
@@ -155,7 +164,9 @@
 				}
 				// Load menu bar
 				$this->registry->template->menu=$this->thumuc2Model->getMenu();
+				$this->registry->template->num_notice=$this->thumuc2Model->count_notice($_SESSION['id']);
 				// End load menubar
+				$this->registry->template->users=$this->thumuc2Model->getNewUsers();
 				$this->registry->template->show('thumuc2/thumuc2.delete');
 			}else{
 				redirect_to();

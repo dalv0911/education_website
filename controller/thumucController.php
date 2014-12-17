@@ -16,9 +16,13 @@
 				$this->registry->template->pages=$this->thumucModel->getPages($thumuc_id);
 				$this->registry->template->thumuc2=$this->thumucModel->getThuMuc2($thumuc_id);
 				$this->registry->template->menu_detail=$this->thumucModel->getMenuByThuMucId($thumuc_id);
+				if(isset($_SESSION['id'])){
+					$this->registry->template->num_notice=$this->thumucModel->count_notice($_SESSION['id']);
+				}
 				// Load menu bar
 				$this->registry->template->menu=$this->thumucModel->getMenu();
 				// End load menubar
+				$this->registry->template->users=$this->thumucModel->getNewUsers();
 				$this->registry->template->show("thumuc/index");
 			}else{
 				redirect_to();
@@ -71,9 +75,11 @@
 			}
 				// Load menu bar
 			$this->registry->template->menu=$this->thumucModel->getMenu();
+			$this->registry->template->num_notice=$this->thumucModel->count_notice($_SESSION['id']);
 			// End load menubar
 			$this->registry->template->max_position=$this->thumucModel->getPosition();
 			$this->registry->template->title="Tạo mới thư mục DA-MVC";
+			$this->registry->template->users=$this->thumucModel->getNewUsers();
 			$this->registry->template->show('thumuc/thumuc.create');
 		}
 		public function edit(){
@@ -123,6 +129,8 @@
 				}
 					// Load menu bar
 				$this->registry->template->menu=$this->thumucModel->getMenu();
+				$this->registry->template->num_notice=$this->thumucModel->count_notice($_SESSION['id']);
+				$this->registry->template->users=$this->thumucModel->getNewUsers();
 				// End load menubar
 				$this->registry->template->max_position=$this->thumucModel->getPosition();
 				$this->registry->template->title="Sửa thư mục DA-MVC";
@@ -133,7 +141,7 @@
 		}
 		public function delete(){
 			
-			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1)) && isset($_SESSION['id'])){
 				// Load model ..
 				$this->thumucModel=new thumucModel();
 				// Xử lý form ..
@@ -166,6 +174,8 @@
 				}
 				// Load menu bar
 				$this->registry->template->menu=$this->thumucModel->getMenu();
+				$this->registry->template->num_notice=$this->thumucModel->count_notice($_SESSION['id']);
+				$this->registry->template->users=$this->thumucModel->getNewUsers();
 				// End load menubar
 				$this->registry->template->show('thumuc/thumuc.delete');
 			}else{

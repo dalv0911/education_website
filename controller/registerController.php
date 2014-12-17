@@ -12,7 +12,7 @@
 				$users=array();
 				$regex = "/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/"; 
 				if(preg_match($regex,$_POST['email'])){
-					if($this->registerModel->isEmail(strip_tags($_POST['email']))){
+					if($this->registerModel->isEmail(strip_tags($_POST['email']))){	
 						$errors[]="email_is_available";
 					}else{
 						$a=md5(uniqid(rand(),true));
@@ -39,8 +39,8 @@
 						// $body.="To complete your registration, please visit this url:<br>";
 						// $body.=BASE_URL."activate?x=".urlencode($_POST['email'])."&y=".$a;
 						// if(mail($_POST['email'],'Kích hoạt tài khoản',$body,'FROM :Localhost')){
-						// 	$message="<div class='alert alert-success'>
-						// 		<strong>Well done ! <strong>Để hoàn tất việc đăng kí tài khoản ,bạn vui lòng đi đến email của bạn để kích hoạt tài khoản .</div>";
+							$message="<div class='alert alert-success'>
+								<strong>Well done ! <strong>Để hoàn tất việc đăng kí tài khoản ,bạn vui lòng đi đến email của bạn để kích hoạt tài khoản .</div>";
 						// }else{
 						// 	$message="<div class='alert alert-warning'>
 						// 		<strong>So Sad ! <strong> Chúng tôi không thể send mail đến tài khoản của bạn , Thật sự xin lỗi bài vì sự phức tạp này .</div>";
@@ -56,7 +56,8 @@
 				$this->registry->template->errors=$errors;
 			}
 			$this->registry->template->title="Registry";
-			
+			$this->registry->template->menu=$this->registerModel->getMenu();
+			$this->registry->template->users=$this->registerModel->getNewUsers();
 			$this->registry->template->show("users/users.register");
 		}
 	}

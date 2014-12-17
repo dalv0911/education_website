@@ -34,7 +34,7 @@
 							if($users['password']==$users_data[$i]['password']){
 								$check_pass=1;
 								// Set Session user_id
-								$_SESSION['id']=$this->loginModel->getUserId($users['username']);
+								$_SESSION['id']=$users_data[$i]['id'];
 								//$users=$this->loginModel->getUsers($user_id);
 								$_SESSION['username']=$users_data[$i]['username'];
 								$_SESSION['level']=$users_data[$i]['level'];
@@ -57,6 +57,8 @@
 				$this->registry->template->errors=$errors;
 			}
 			$this->registry->template->title='Login - Da CMS';
+			$this->registry->template->menu=$this->loginModel->getMenu();
+			$this->registry->template->users=$this->loginModel->getNewUsers();
 			$this->registry->template->show('users/users.login');
 		}
 	}

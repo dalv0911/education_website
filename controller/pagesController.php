@@ -1,34 +1,67 @@
 <?php
 	session_start();
 	include 'models/pages.model.php';
+	include 'models/users.model.php';
 	include 'models/check_ajax.model.php';
 ?>
 <?php
 	class pagesController extends Controller{
-		private $pagesModel=null;
+
+		private $pagesModel		=null;
 		private $check_ajaxModel=null;
+		private $usersModel		=null;
+
 		public function index(){
 			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
-				$id=$_GET['id'];
-				$this->pagesModel=new pagesModel();
-				$pages=$this->pagesModel->getPages($id);
-				$pages['id']=$id;
+				$this->pagesModel	=new pagesModel();
+				$this->usersModel	=new usersModel();
+				$pages=array();
+				$pages=$this->pagesModel->getPages($_GET['id']);
 				$this->registry->template->pages=$pages;
+				if($_SERVER['REQUEST_METHOD']=="POST" && isset($_SESSION['id'])){
+					if(!empty($_POST['comment'])){
+						$comment=array();
+						$comment['user_id']=$_SESSION['id'];
+						$comment['page_id']=$_GET['id'];
+						$comment['content']=strip_tags($_POST['comment']);
+						if($this->pagesModel->insert_comment($comment)){
+								
+						}else{
+							$m_comment="Có lỗi xảy ra từ hệ thống , bình luận của bạn chưa được đăng .
+										<br> Chúng tôi rất xin lỗi về sự bất tiện này";
+							$this->registry->template->m_comment=$m_comment;
+						}
+					}
+				}
+				if(isset($_SESSION['id']) && $this->usersModel->check_history($_SESSION['id'],$_GET['id'])){
+					if($this->usersModel->insert_history($_SESSION['id'],$_GET['id'])){
+
+					}else{
+
+					}
+					
+				}
+				if(isset($_SESSION['id'])){
+					$this->registry->template->num_notice=$this->pagesModel->count_notice($_SESSION['id']);
+				}
+				$this->registry->template->comment=$this->pagesModel->getComment($_GET['id']);
 				// Load menu bar
 				$this->registry->template->menu=$this->pagesModel->getMenu();
 				// End load menubar
 				$this->registry->template->title=$pages['title'];
+				$this->registry->template->users=$this->pagesModel->getNewUsers();
 				$this->registry->template->show("pages/index");
 			}else{
 				redirect_to();
 			}
 		}
 		public function create(){
-			if(isset($_SESSION['level']) && $_SESSION['level']==3){
+			if(isset($_SESSION['level']) && $_SESSION['level']>=4){
 				$this->pagesModel=new pagesModel();
 				$this->check_ajaxModel=new check_ajaxModel();
 				$pages=array();
 				$errors=array();
+				$tags=array();
 				$pages['author_id']=$_SESSION['id'];
 				if($_SERVER['REQUEST_METHOD']=='POST'){
 					if(!empty($_POST['name'])){
@@ -100,11 +133,18 @@
 					}else{
 						$errors[]="keyword";
 					}
-					if(!empty($_POST['meta'])){
-						$pages['meta']=$_POST['meta'];
-					}else{
-						$errors[]="meta";
-					}
+					if(!empty($_POST['tags'])){
+							$tags=explode(",",$_POST['tags']);
+							$i=0;
+							while(isset($tags[$i]) &&$tags[$i]!=null){
+								if(!$this->pagesModel->is_tags($tags[$i])){//Kiểm tra xem tag đã tồn tại chưa
+									$this->pagesModel->insert_tags($tags[$i]); // Thêm tag vào cơ sở dữ liệu nếu tag chưa đk add
+								}
+								$i++;
+							}
+						}else{
+							$errors[]="tags";
+						}
 					if(empty($errors)){
 						if($this->pagesModel->create($pages)){
 							$id=$this->pagesModel->getPageId($pages['name']);
@@ -139,6 +179,12 @@
 									$this->registry->template->message=$message;
 								}
 							}
+							$i=0;
+							while(isset($tags[$i]) &&$tags[$i]!=null){
+								$tag_id=$this->pagesModel->get_id_tags($tags[$i]);
+								$this->pagesModel->insert_tags_target($id,$tag_id);
+								$i++;
+							}
 							
 						}else{
 							$message="<div class='alert alert-warning'>
@@ -153,7 +199,9 @@
 				$this->registry->template->thumuc2=$this->pagesModel->getThuMuc2();
 				// Load menu bar
 				$this->registry->template->menu=$this->pagesModel->getMenu();
+				$this->registry->template->num_notice=$this->pagesModel->count_notice($_SESSION['id']);
 				// End load menubar
+				$this->registry->template->users=$this->pagesModel->getNewUsers();
 				$this->registry->template->show('pages/pages.create');
 			}else{
 				redirect_to("");
@@ -172,6 +220,7 @@
 					$page_thumuc=$this->pagesModel->getThuMucById($id);
 					$page_thumuc2=$this->pagesModel->getThuMuc2ById($id);
 					$pages['author_id']=$_SESSION['id'];
+					$this->registry->template->tags=$this->pagesModel->get_tags_target($id);
 					if($_SERVER['REQUEST_METHOD']=='POST'){
 						if(!empty($_POST['name'])){
 							if($this->check_ajaxModel->check_edit_name_pages($_POST['name'],$id)){
@@ -242,26 +291,38 @@
 						}else{
 							$errors[]="keyword";
 						}
-						if(!empty($_POST['meta'])){
-							$pages['meta']=$_POST['meta'];
+						if(!empty($_POST['tags'])){
+							$tags=explode(",",$_POST['tags']);
+							$i=0;
+							while(isset($tags[$i]) &&$tags[$i]!=null){
+								if(!$this->pagesModel->is_tags($tags[$i])){//Kiểm tra xem tag đã tồn tại chưa
+									$this->pagesModel->insert_tags($tags[$i]); // Thêm tag vào cơ sở dữ liệu nếu tag chưa đk add
+								}
+								$i++;
+							}
+							if($this->pagesModel->del_tags_target($id)){
+								//Xóa những tag của page_id để chuẩn bị cho việc sửa đổi
+							}else{
+								$errors[]="system";
+							}
 						}else{
-							$errors[]="meta";
+							$errors[]="tags";
 						}
 						if(empty($errors)){
 							if($this->pagesModel->edit($pages)){
-								if(!empty($page_menu['menu_id'])&&empty($pages['menu_id'])){
+								if(!empty($page_menu['menu_id'])){
 									if($this->pagesModel->delete_page_menu($id)){
 									}else{
 										$message="errors";
 										$this->registry->template->message=$message;
 									}
-								}else if(!empty($page_thumuc['thumuc_id'])&&empty($pages['thumuc_id'])){
+								}else if(!empty($page_thumuc['thumuc_id'])){
 									if($this->pagesModel->delete_page_thumuc($id)){
 									}else{
 										$message="errors";
 										$this->registry->template->message=$message;
 									}
-								}else if(!empty($page_thumuc2['thumuc2_id'])&&empty($pages['thumuc2_id'])){
+								}else if(!empty($page_thumuc2['thumuc2_id'])){
 									if($this->pagesModel->delete_page_thumuc2($id)){
 									
 									}else{
@@ -299,6 +360,12 @@
 										$this->registry->template->message=$message;
 									}
 								}
+								$i=0;
+								while(isset($tags[$i]) &&$tags[$i]!=null){
+									$tag_id=$this->pagesModel->get_id_tags($tags[$i]);
+									$this->pagesModel->insert_tags_target($id,$tag_id);
+									$i++;
+								}
 							}else{
 								$message="<div class='alert alert-warning'>
 										<strong>Error !</strong>Có lỗi xảy ra ... xin vui lòng thử lại lần sau .</div>";
@@ -312,7 +379,9 @@
 					$this->registry->template->thumuc2=$this->pagesModel->getThuMuc2();
 					// Load menu bar
 					$this->registry->template->menu=$this->pagesModel->getMenu();
+					$this->registry->template->num_notice=$this->pagesModel->count_notice($_SESSION['id']);
 					// End load menubar
+					$this->registry->template->users=$this->pagesModel->getNewUsers();
 					$this->registry->template->show('pages/pages.edit');
 				}else{
 					redirect_to("error404");
@@ -328,6 +397,7 @@
 					$id=$_GET['id'];
 					$pages=array();
 					$pages=$this->pagesModel->getPageById($id);
+					$this->pagesModel->del_tags_target($id);
 					if(empty($pages['name'])){
 						redirect_to('index.php');
 					}else{
@@ -353,7 +423,9 @@
 				}
 					// Load menu bar
 				$this->registry->template->menu=$this->pagesModel->getMenu();
+				$this->registry->template->num_notice=$this->pagesModel->count_notice($_SESSION['id']);
 				// End load menubar
+				$this->registry->template->users=$this->pagesModel->getNewUsers();
 				$this->registry->template->show('pages/pages.delete');
 			}else{
 				redirect_to();
