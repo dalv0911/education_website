@@ -1,5 +1,5 @@
 <?php
-	define('BASE_URL','http://localhost/education_website/');
+	define('BASE_URL','http://localhost/education/');
 	function redirect_to($page="index.php"){
 		$url=BASE_URL.$page;
 		header("Location:$url");
@@ -83,12 +83,14 @@
 				echo "<div class='alert alert-warning'>Bạn chưa nhập keyword .</div>";
 		}else if(in_array('des',$errors)){
 				echo "<div class='alert alert-warning'>Bạn chưa nhập mô tả cho bài viết .</div>";
-		}else if(in_array('meta',$errors)){
-				echo "<div class='alert alert-warning'>Bạn chưa nhập meta bài viết .</div>";
+		}else if(in_array('tags',$errors)){
+				echo "<div class='alert alert-warning'>Bạn chưa nhập tags bài viết .</div>";
 		}else if(in_array('name_is_available',$errors)){
 				echo "<div class='alert alert-warning'>Đã có một bài viết trùng tên .</div>";
 		}else if(in_array('upload',$errors)){
 				echo "<div class='alert alert-warning'>File tải lên không thành công .</div>";
+		}else if(in_array('system',$errors)){
+				echo "<div class='alert alert-warning'>Có lỗi xảy ra do hệ thống.</div>";
 		}
 	}
 	// check error for form register
@@ -116,7 +118,15 @@
 			echo "<div class='alert alert-warning'>Password không chính xác !. Vui lòng thử lại ...</div>";
 		}
 	}
-	
+	function check_error_class(array $errors){
+		if(in_array('name_empty',$errors)){
+			echo "<div class='alert alert-warning'>Bạn chưa nhập tên cho lớp học !<strong>Đây là một trường băt buộc </strong></div>";
+		}else if(in_array('name_avaiable',$errors)){
+			echo "<div class='alert alert-warning'>Tên lớp học này đã tồn tại ! <strong>Vui lòng chọn tên khác .</strong></div>";
+		}else if(in_array('content',$errors)){
+			echo "<div class='alert alert-warning'>Nội dung không được để trống ! <strong>.</strong></div>";
+		}
+	}
 
 	function upload(array $file){
 		$allowedExts1 = array("jpg","jpeg","gif", "png");
@@ -155,4 +165,107 @@
 		}
 		return $message;
 	}
-	
+	function upload_avatar(array $file){
+		$allowedExts1 = array("jpg","jpeg","gif", "png");
+		$extension = substr($file['name'], strrpos($file['name'], '.') + 1);
+		$message=null;
+		if(in_array($extension, $allowedExts1))
+		{
+			if ($file["error"] >0)
+		    {
+		    	$message="<div class='alert alert-warning'>Return Code: ".$file["error"]."</div><br />";
+		    }else{
+		    	if (file_exists("upload/avatar/".$file["name"]))
+		      	{
+		        	$message="<div class='alert alert-warning'>".$file["name"]." already exists. </div>";
+		      	}else{
+		       		move_uploaded_file($file["tmp_name"],"upload/avatar/".$file["name"]);
+		       		$message="success";
+		      	}
+		    }
+		}else{
+		  	$message="<div class='alert alert-warning'>Invalid file</div>";
+		}
+		return $message;
+	}
+	function caltime($time1,$time2)
+	{
+	    $c1=mktime(0,0,0,$time1[1],$time1[2],$time1[0]);
+	    $c2=mktime(0,0,0,$time2[1],$time2[2],$time2[0]);
+	    $diff=$c1-$c2;
+	    if($diff<0)
+	        $diff=-$diff;
+	    $h=date('t',$diff);
+	    $m=date('i',$diff);
+	    $s=date('s',$diff);
+	    return "$h ";
+	}
+	function diff_time($time){
+		$date1 = new DateTime(date("Y-m-d",time()));
+		$date2 = new DateTime($time);
+		$interval = $date1->diff($date2);
+		return $interval->m*30+$interval->days." days ";
+	}
+	function show_time($time) {
+	    $s = date("Y-m-d h:i:s",time()) - $time;
+	    if ($s <= 60) { // if < 60 seconds
+	        return 'Khoảng 1 phút trước';
+	    } else {
+	        $t = intval($s / 60);
+	        if ($t >= 60) {
+	            $t = intval($t / 60);
+	            if ($t >= 24) {
+	                $t = intval($t / 24);
+	                if ($t >= 30) {
+	                    $t = intval($t / 30);
+	                    if ($t >= 12) {
+	                        $t = intval($t / 12);
+	                        return $t . ' năm trước';
+	                    } else {
+	                        return $t . ' tháng trước';
+	                    }
+	                } else {
+	                    return $t . ' ngày trước';
+	                }
+	            } else {
+	                return $t . ' giờ trước';
+	            }
+	        } else {
+	            return $t . ' phút trước';
+	        }
+    }
+}  
+	function gender($gender){
+		switch($gender){
+			case 1: $message="Nam";break;
+			case 2: $message="Nữ";break;
+			case 3: $message="Không xác định";break;
+			default:$message="Không xác định";break;
+		}
+		return $message;
+	}
+	function resize_image_max($images,$max_width,$max_height) {
+		$image=ImageCreateFromJpeg($images);
+	    $w = imagesx($image); //current width
+	    $h = imagesy($image); //current height
+	    if ((!$w) || (!$h)) { $GLOBALS['errors'][] = 'Image couldn\'t be resized because it wasn\'t a valid image.'; return false; }
+	 
+	    if (($w <= $max_width) && ($h <= $max_height)) { return $image; } //no resizing needed
+	 
+	    //try max width first...
+	    $ratio = $max_width / $w;
+	    $new_w = $max_width;
+	    $new_h = $h * $ratio;
+	 
+	    //if that didn't work
+	    if ($new_h > $max_height) {
+	        $ratio = $max_height / $h;
+	        $new_h = $max_height;
+	        $new_w = $w * $ratio;
+	    }
+	 
+	    $new_image = imagecreatetruecolor ($new_w, $new_h);
+	    imagecopyresampled($new_image,$image, 0, 0, 0, 0, $new_w, $new_h, $w, $h);
+	    return $new_image;
+	}
+

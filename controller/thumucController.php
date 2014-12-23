@@ -11,10 +11,16 @@
 			$this->thumucModel=new thumucModel();
 			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
 				$thumuc_id=$_GET['id'];
-
+				if(isset($_GET['s'])&& filter_var($_GET['s'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+					$s=$_GET['s'];
+				}else{
+					$s=0;
+				}
+				$current=$s*10;
+				$this->registry->template->thumuc2=$this->thumucModel->getThuMuc2($thumuc_id,$current);
+				$this->registry->template->num_tm2=$this->thumucModel->count_thumuc2($thumuc_id);
 				$this->registry->template->thumuc=$this->thumucModel->getThuMucById($thumuc_id);
 				$this->registry->template->pages=$this->thumucModel->getPages($thumuc_id);
-				$this->registry->template->thumuc2=$this->thumucModel->getThuMuc2($thumuc_id);
 				$this->registry->template->menu_detail=$this->thumucModel->getMenuByThuMucId($thumuc_id);
 				if(isset($_SESSION['id'])){
 					$this->registry->template->num_notice=$this->thumucModel->count_notice($_SESSION['id']);
@@ -33,7 +39,7 @@
 			$this->thumucModel=new thumucModel();
 			$this->check_ajaxModel=new check_ajaxModel();
 			$thumuc=array();
-			if(!isset($_SESSION['level'])|| $_SESSION['level']!=3){
+			if(!isset($_SESSION['level'])|| $_SESSION['level']<4){
 				redirect_to();
 			}
 			if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -83,7 +89,7 @@
 			$this->registry->template->show('thumuc/thumuc.create');
 		}
 		public function edit(){
-			if(!isset($_SESSION['level'])|| $_SESSION['level']!=3){
+			if(!isset($_SESSION['level'])|| $_SESSION['level']<4){
 				redirect_to();
 			}
 			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){

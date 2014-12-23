@@ -125,9 +125,12 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT p.id,p.name 
-					FROM pages AS p LEFT JOIN page_thumuc2 AS ptm2
+			$sql="SELECT p.id,p.name,p.des,p.image_icon,p.time_on,p.author_id,CONCAT(' ',first_name,last_name) AS user_name
+					FROM pages AS p 
+					LEFT JOIN page_thumuc2 AS ptm2
 						ON p.id=ptm2.page_id
+					LEFT JOIN users AS u
+						ON u.id=p.author_id
 					WHERE ptm2.thumuc2_id=?";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$thumuc2_id);
@@ -157,5 +160,6 @@
 				return false;
 			}
 		}
+		
 	}
 ?>

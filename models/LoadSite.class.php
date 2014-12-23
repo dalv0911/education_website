@@ -21,7 +21,8 @@
 				self::$conn=$this->connect_pdo();
 			}
 			$sql="SELECT id,CONCAT_WS(' ',first_name,last_name) AS name,username,email,avatar,time_on
-					FROM users limit 10";
+					FROM users 
+					ORDER BY time_on DESC limit 10";
 			$stmt=self::$conn->query($sql);
 			$i=0;
 			$users=array(array());

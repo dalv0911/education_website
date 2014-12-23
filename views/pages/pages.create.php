@@ -68,7 +68,7 @@
 						<label class="col-md-3">File Nghe</label>
 						<input type="file" name="mp3"/><br>
 					</div>
-						<textarea class="content" name="content" row="6"placeholder="Nội dung bài viết"><?php
+						<textarea class="content" name="content" row="6" placeholder="Nội dung bài viết"><?php
 								echo isset($_POST['content'])?$_POST['content']:''?></textarea>
 					<div>
 						<label></label>
@@ -83,8 +83,8 @@
 					</div>
 					<div>
 						<label></label>
-						<textarea class="form-control" row="3" name="meta" placeholder="Meta bài viết "><?php
-								echo isset($_POST['meta'])?$_POST['meta']:''?></textarea><br>
+						<textarea class="form-control" row="3" name="tags" placeholder="Meta bài viết "><?php
+								echo isset($_POST['tags'])?$_POST['tags']:''?></textarea><br>
 					</div>
 					<div class="col-lg-3">
 						<button type="submit" class="btn btn-default btn-success" name="submit">Create</button>
@@ -92,8 +92,6 @@
 				</form>
 			</div>
 		</div>
-
-
 <?php
 	include'views/side_bar.php';
 	include'views/footer.php';

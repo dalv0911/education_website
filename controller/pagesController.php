@@ -3,6 +3,8 @@
 	include 'models/pages.model.php';
 	include 'models/users.model.php';
 	include 'models/check_ajax.model.php';
+	include 'models/favorite.model.php';
+	include 'includes/images.php';
 ?>
 <?php
 	class pagesController extends Controller{
@@ -10,11 +12,12 @@
 		private $pagesModel		=null;
 		private $check_ajaxModel=null;
 		private $usersModel		=null;
-
+		private $favoriteModel	=null;
 		public function index(){
 			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
-				$this->pagesModel	=new pagesModel();
-				$this->usersModel	=new usersModel();
+				$this->pagesModel		=new pagesModel();
+				$this->usersModel		=new usersModel();
+				$this->favoriteModel	=new favoriteModel();
 				$pages=array();
 				$pages=$this->pagesModel->getPages($_GET['id']);
 				$this->registry->template->pages=$pages;
@@ -24,8 +27,7 @@
 						$comment['user_id']=$_SESSION['id'];
 						$comment['page_id']=$_GET['id'];
 						$comment['content']=strip_tags($_POST['comment']);
-						if($this->pagesModel->insert_comment($comment)){
-								
+						if($this->pagesModel->insert_comment($comment)){			
 						}else{
 							$m_comment="Có lỗi xảy ra từ hệ thống , bình luận của bạn chưa được đăng .
 										<br> Chúng tôi rất xin lỗi về sự bất tiện này";
@@ -35,15 +37,18 @@
 				}
 				if(isset($_SESSION['id']) && $this->usersModel->check_history($_SESSION['id'],$_GET['id'])){
 					if($this->usersModel->insert_history($_SESSION['id'],$_GET['id'])){
-
 					}else{
-
-					}
-					
+					}	
 				}
 				if(isset($_SESSION['id'])){
 					$this->registry->template->num_notice=$this->pagesModel->count_notice($_SESSION['id']);
+					if($this->favoriteModel->is_checked($_SESSION['id'],$_GET['id'])){
+						$this->registry->template->is_checked=1;
+					}else{
+						$this->registry->template->is_checked=0;
+					}
 				}
+				$this->registry->template->page_around=$this->pagesModel->get_pages_around($_GET['id']);
 				$this->registry->template->comment=$this->pagesModel->getComment($_GET['id']);
 				// Load menu bar
 				$this->registry->template->menu=$this->pagesModel->getMenu();
@@ -97,15 +102,14 @@
 						$errors[]='chuyen_muc';
 					}
 					if(!empty($_FILES['image_icon']['name'])){
-						$temp=upload($_FILES['image_icon']);
-						if($temp!="success"){
-							$errors[]="image_icon";
-							$this->registry->template->image_error=$temp;
+						$temp=process_images_pages($_FILES['image_icon'],150);
+						if($temp!=null){
+							$pages['image_icon']=$temp;
 						}else{
-							$pages['image_icon']=$_FILES['image_icon']['name'];
+							$pages['image_icon']='default.jpg';
 						}
 					}else{
-						$pages['image_icon']=null;
+						$pages['image_icon']='default.jpg';
 					}
 					if(!empty($_FILES['mp3']['name'])){
 						$temp=upload($_FILES['mp3']);
@@ -151,7 +155,8 @@
 							if(!empty($id)&&!empty($pages['menu_id'])){
 								if($this->pagesModel->insert_page_menu($id,$pages['menu_id'])){
 									$message="<div class='alert alert-success'>
-											<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .</div>";
+											<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .
+												Xem bài viết <a href='?rt=pages&id=".$id."'>tại đây</a></div>";
 									$this->registry->template->message=$message;
 								}else{
 									$message="<div class='alert alert-warning'>
@@ -161,7 +166,8 @@
 							}else if(!empty($id)&&!empty($pages['thumuc_id'])){
 								if($this->pagesModel->insert_page_thumuc($id,$pages['thumuc_id'])){
 									$message="<div class='alert alert-success'>
-											<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .</div>";
+											<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .
+												Xem bài viết <a href='?rt=pages&id=".$id."'>tại đây</a></div>";
 									$this->registry->template->message=$message;
 								}else{
 									$message="<div class='alert alert-warning'>
@@ -171,7 +177,8 @@
 							}else if(!empty($id)&&!empty($pages['thumuc2_id'])){
 								if($this->pagesModel->insert_page_thumuc2($id,$pages['thumuc2_id'])){
 									$message="<div class='alert alert-success'>
-											<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .</div>";
+											<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .
+												Xem bài viết <a href='?rt=pages&id=".$id."'>tại đây</a></div>";
 									$this->registry->template->message=$message;
 								}else{
 									$message="<div class='alert alert-warning'>
@@ -208,14 +215,17 @@
 			}
 		}
 		public function edit(){
-			if(isset($_SESSION['level']) && $_SESSION['level']==3){
+			if(isset($_SESSION['level']) && $_SESSION['level']>=4){
 				if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
 					$this->pagesModel=new pagesModel();
 					$this->check_ajaxModel=new check_ajaxModel();
 					$pages=array();
 					$errors=array();
+					$pages_temp=array();
 					$id=$_GET['id'];
-					$this->registry->template->pages=$this->pagesModel->getPages($id);
+					$pages['id']=$id;
+					$pages_temp=$this->pagesModel->getPages($id);
+					$this->registry->template->pages=$pages_temp;
 					$page_menu=$this->pagesModel->getMenuById($id);
 					$page_thumuc=$this->pagesModel->getThuMucById($id);
 					$page_thumuc2=$this->pagesModel->getThuMuc2ById($id);
@@ -255,15 +265,14 @@
 							$errors[]='chuyen_muc';
 						}
 						if(!empty($_FILES['image_icon']['name'])){
-							$temp=upload($_FILES['image_icon']);
-							if($temp!="success"){
-								$errors[]="image_icon";
-								$this->registry->template->image_error=$temp;
+							$temp=process_images_pages($_FILES['image_icon'],150);
+							if($temp!=null){
+								$pages['image_icon']=$temp;
 							}else{
-								$pages['image_icon']=$_FILES['image_icon']['name'];
+								$pages['image_icon']=$pages_temp['image_icon'];
 							}
 						}else{
-							$pages['image_icon']=null;
+							$pages['image_icon']=$pages_temp['image_icon'];
 						}
 						if(!empty($_FILES['mp3']['name'])){
 							$temp=upload($_FILES['mp3']);
@@ -329,10 +338,12 @@
 										$message="errors";
 										$this->registry->template->message=$message;
 									}
-								}elseif(!empty($id)&&!empty($pages['menu_id'])){
+								}
+								if(!empty($id)&&!empty($pages['menu_id'])){
 									if($this->pagesModel->insert_page_menu($id,$pages['menu_id'])){
 										$message="<div class='alert alert-success'>
-												<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .</div>";
+											<strong>Well done !</strong> Bài viết của bạn đã được sửa thành công .
+												Xem bài viết <a href='?rt=pages&id=".$id."'>tại đây</a></div>";
 										$this->registry->template->message=$message;
 									}else{
 										$message="<div class='alert alert-warning'>
@@ -342,7 +353,8 @@
 								}else if(!empty($id)&&!empty($pages['thumuc_id'])){
 									if($this->pagesModel->insert_page_thumuc($id,$pages['thumuc_id'])){
 										$message="<div class='alert alert-success'>
-												<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .</div>";
+											<strong>Well done !</strong> Bài viết của bạn đã được sửa thành công .
+												Xem bài viết <a href='?rt=pages&id=".$id."'>tại đây</a></div>";
 										$this->registry->template->message=$message;
 									}else{
 										$message="<div class='alert alert-warning'>
@@ -352,7 +364,8 @@
 								}else if(!empty($id)&&!empty($pages['thumuc2_id'])){
 									if($this->pagesModel->insert_page_thumuc2($id,$pages['thumuc2_id'])){
 										$message="<div class='alert alert-success'>
-												<strong>Well done !</strong> Bài viết của bạn đã được đăng thành công .</div>";
+											<strong>Well done !</strong> Bài viết của bạn đã được sửa thành công .
+												Xem bài viết <a href='?rt=pages&id=".$id."'>tại đây</a></div>";
 										$this->registry->template->message=$message;
 									}else{
 										$message="<div class='alert alert-warning'>
@@ -391,7 +404,7 @@
 			}
 		}
 		public function delete(){
-			if(isset($_SESSION['level']) && $_SESSION['level']==3){
+			if(isset($_SESSION['level']) && $_SESSION['level']>=4){
 				$this->pagesModel=new pagesModel();
 				if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
 					$id=$_GET['id'];

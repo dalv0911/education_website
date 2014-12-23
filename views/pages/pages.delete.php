@@ -16,7 +16,6 @@
 			<h2 class="panel-title">Delete Bài viết</h2>
 		</div>
 			<div class="panel-body">
-				
 				<form method="post">
 					<label class="radio-inline">
 						<input type="radio" name="delete-radio" id="delete-radio" value="delete">Delete
@@ -29,7 +28,6 @@
 					</div>
 				</form>
 			</div>
-		</div>
 	</div>
 <?php
 	include'views/side_bar.php';

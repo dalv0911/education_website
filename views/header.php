@@ -19,18 +19,17 @@
         <script type="text/javascript" src="bootstrap/js/plugins/morris/morris.min.js"></script>
         <script type="text/javascript" src="bootstrap/js/plugins/morris/morris-data.js"></script>
         <script type="text/javascript" src="bootstrap/tinymce/tinymce.min.js" ></script>
-        
         <script type="text/javascript">
             tinymce.init({
                 selector: "textarea.content",
                 theme: "modern",
                 plugins: [
-                     "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                     "advlist autolink link image lists charmap preview hr anchor pagebreak spellchecker",
                      "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
                      "save table contextmenu directionality emoticons template paste textcolor"
                ],
                content_css: "css/content.css",
-               toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons", 
+               toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons", 
                style_formats: [
                     {title: 'Bold text', inline: 'b'},
                     {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
@@ -41,7 +40,6 @@
                     {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
                 ]
              }); 
-        
         </script>
         <!-- Bootstrap Core CSS -->
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -66,16 +64,19 @@
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php 
-                            if(isset($_SESSION['username'])) echo $_SESSION['username'];?> <b class="caret"></b></a>
+                            if(isset($num_notice) && $num_notice>0) echo ' <span style="color:#108917;font-weight:bold;font-size:20px;"> '.$num_notice.'</span>';
+                            if(isset($_SESSION['username'])) echo '<span style="font-weight:bold;color:red;">'.$_SESSION['username'].'</span>';
+                                    ?><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                         <?php echo'<a href="?rt=users&id='.$_SESSION['id'].'"><i class="fa fa-fw fa-user"></i> Profile</a>';?>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                            <a href="?rt=notify"><i class="glyphicon glyphicon-bell"></i> Notice <?php 
+                                    if(isset($num_notice) && $num_notice>0) echo '<span style="color:#108917;font-weight:bold;font-size:20px;">'.$num_notice.'</span>';?></a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                            <a href="<?php echo '?rt=users/info&id='.$_SESSION['id'].'';?>"><i class="fa fa-fw fa-gear"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -104,7 +105,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../education_website">DA MVC</a>
+                    <a class="navbar-brand" href="?rt=index">DA MVC</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
@@ -114,7 +115,6 @@
                                 echo '
                                     <li>
                                         <a href="?rt=menu&id='.$menu[$i]['id'].'" >'.$menu[$i]['name'].'</a>
-                                        
                                     </li>
                                 ';
                                 $i++;
@@ -124,6 +124,11 @@
                     </ul>
                 </div>
                         <!--/.nav-collapse -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="banner">
+                <img src="upload/images/bannerl2015.jpg" alt="Education webstie">
             </div>
         </div>
         <div class="row">

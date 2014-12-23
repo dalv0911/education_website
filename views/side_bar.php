@@ -4,12 +4,14 @@
     <!--  Search -->
 <div class="col-lg-3">
     <div clas="row">
-        <div class="input-group">
-            <input type="text" class="form-control" name="search">
-            <span class="input-group-btn">
-                <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
-            </span>
-        </div>
+        <form action="?rt=search" method="post">
+            <div class="input-group">
+                <input type="text" class="form-control" name="keyword" placeholder="Tìm kiếm ..">
+                <span class="input-group-btn">
+                    <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div>
+        </form>
     </div>
     <!-- End search -->
     <br>

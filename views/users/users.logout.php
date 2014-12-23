@@ -50,7 +50,7 @@
 					<div class="panel-body">
 							<?php
 							
-								echo "<p>Bạn sẽ tự động trở về trang chủ sau khi click <a href='/education_website/index.php'>DA CMS </a></p>";
+								echo "<p>Bạn sẽ tự động trở về trang chủ sau khi click <a href='?rt=index'>DA CMS </a></p>";
 								$i=0;
 								
 							?>

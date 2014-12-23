@@ -203,6 +203,33 @@
 				return false;
 			}
 		}
+		public function del_cmt($id){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="DELETE FROM comment WHERE id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$id);
+			if($stmt->execute()){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function update_level($id,$level){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="UPDATE users SET level=? WHERE id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$level);
+			$stmt->bindParam(2,$id);
+			if($stmt->execute()){
+				return true;
+			}else{
+				return false;
+			}
+		}
 
 	}
 ?>

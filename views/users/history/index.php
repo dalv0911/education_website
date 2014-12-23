@@ -2,18 +2,6 @@
 	include 'views/header.php';
 	include 'views/users/side_left.php';
 ?>
-<div class="col-lg-6">
-	<?php
-		if(isset($message)){
-			echo $message;
-		}
-		if(isset($errors) && in_array('email',$errors)){
-			echo "<div class='alert alert-warning'>Bạn chưa nhập email . Đây là một trường bắt buộc .</div>";
-		}
-		if(isset($errors) && in_array('avatar',$errors)){
-			echo "<div class='alert alert-warning'>Ảnh đại diện của bạn chưa được upload .</div>";
-		}
-	?>
 	<div class="panel panel-success">
 		<div class="panel-heading">
 			<h3>Lịch sử học tập của :<?php echo isset($users['name'])?$users['name']:'';?></h3>
@@ -43,7 +31,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 <?php
 	include 'views/users/side_right.php';
 	include 'views/footer.php';

@@ -2,7 +2,6 @@
 	include 'views/header.php';
 	include 'views/users/side_left.php';
 ?>
-<div class="col-lg-6">
 	<?php
 		if(isset($message)){
 			echo $message;
@@ -79,7 +78,6 @@
 			</form>
 		</div>
 	</div>
-</div>
 <?php
 	include 'views/users/side_right.php';
 	include 'views/footer.php';

@@ -29,7 +29,7 @@
 		}
 		// ==========CREATE ==================
 		public function create(){
-			if(!isset($_SESSION['level'])|| $_SESSION['level']!=3){
+			if(!isset($_SESSION['level'])|| $_SESSION['level']<4){
 				redirect_to();
 			}else if(isset($_GET['thumuc_id']) && filter_var($_GET['thumuc_id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
 				$this->thumuc2Model=new thumuc2Model();
@@ -76,7 +76,7 @@
 			}
 		}
 		public function edit(){
-			if(!isset($_SESSION['level'])|| $_SESSION['level']!=3){
+			if(!isset($_SESSION['level'])|| $_SESSION['level']<4){
 				redirect_to();
 			}
 			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){

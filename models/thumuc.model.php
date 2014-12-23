@@ -5,9 +5,12 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT p.id,p.name 
-					FROM pages AS p LEFT JOIN page_thumuc AS ptm
+			$sql="SELECT p.id,p.name,p.des,p.time_on,p.author_id,p.image_icon,CONCAT_WS(' ',first_name,last_name) AS user_name
+					FROM pages AS p 
+					LEFT JOIN page_thumuc AS ptm
 						ON p.id=ptm.page_id 
+					LEFT JOIN users AS u
+						ON u.id=p.author_id
 					WHERE ptm.thumuc_id =?";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$thumuc_id);
@@ -21,14 +24,14 @@
 			$i--;
 			return $pages;
 		}
-		public function getThuMuc2($thumuc_id){
+		public function getThuMuc2($thumuc_id,$curr){
 			// Connect to database ...
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
 			$sql="SELECT distinct name,id
 					FROM thumuc2
-				    WHERE thumuc_id=?";
+				    WHERE thumuc_id=? LIMIT $curr,10";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$thumuc_id);
 			$stmt->execute();
@@ -190,6 +193,16 @@
 			$i--;
 			return $item_thumuc2;
 		}
-
+		public function count_thumuc2($thumuc_id){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT id FROM thumuc2 WHERE thumuc_id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$thumuc_id);
+			$stmt->execute();
+			$num=$stmt->rowCount();
+			return $num;
+		}
 	}
 ?>

@@ -25,3 +25,25 @@ min-height: 80px;
 .cen {
 text-align: center;
 }
+.accept{
+	color:red;
+}
+.banner{
+	margin-left:16px;
+}
+.hidden{
+	display:none;
+}
+.phantrang{
+	padding-left: 5px;
+	text-align: center;
+}
+.pre-footer .photo-stream img:hover {
+	border-color: #E84D1C;
+}
+.pre-footer-light dl.f-twitter dd a {
+	color: #e84d1c;
+}
+.pre-footer-light address a {
+	color: #e84d1c;
+}

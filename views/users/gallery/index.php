@@ -2,8 +2,6 @@
 	include 'views/header.php';
 	include 'views/users/side_left.php';
 ?>
-
-<div class="col-lg-6">
 	<div class="panel panel-success">
 		<?php
 			if(isset($message)){
@@ -14,7 +12,7 @@
 			<h3>Kho ảnh đại diện của bạn </h3>
 		</div>
 		<div class="panel-body">
-			<i>Bạn hiện có <strong><?php echo $gallery_num['count(id)'];?> </strong>ảnh trong gallery .</i>
+			<i>Bạn hiện có <strong><?php echo !empty($gallery_num['count(id)'])?$gallery_num['count(id)']:'0';?> </strong>ảnh trong gallery .</i>
 			<form method="post">
 			<?php
 				$i=0;
@@ -41,7 +39,6 @@
 			</form>
 		</div>
 	</div>
-</div>
 <?php
 	include 'views/users/side_right.php';
 	include 'views/footer.php';

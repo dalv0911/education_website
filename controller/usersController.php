@@ -3,15 +3,57 @@
 	include 'models/users.model.php';
 	include 'models/check_ajax.model.php';
 	include 'includes/images.php';
+	include 'models/class.model.php';
+	include 'models/favorite.model.php';
+	include 'models/status.model.php';
 ?>
 <?php
 	class usersController extends Controller{
-		private $usersModel=null;
-		private $check_ajaxModel=null;
+		private $usersModel			=null;
+		private $check_ajaxModel	=null;
+		private $classModel			=null;
+		private $favoriteModel		=null;
+		private $statusModel		=null;
 		public function index(){
 			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
-				$this->usersModel=new usersModel();
-				$id=$_GET['id'];
+				$this->usersModel	=new usersModel();
+				$this->classModel	=new classModel();
+				$this->statusModel	=new statusModel();
+				$id=$_GET['id'];		
+				if(isset($_SESSION['id'])&& $_SESSION['id']==$id){
+					if(isset($_POST['post'])){
+						$status=array();
+						if (!empty($_POST['content'])) {
+							$status['content']=$_POST['content'];
+							$status['user_id']=$_SESSION['id'];
+							$status['class_id']=null;
+						}else{
+							$errors[]="content";
+						}
+						if(empty($errors)){
+							if($this->statusModel->create($status)){
+							}else{
+								$message_status="<div class='alert alert-warning'>Có lỗi xảy ra do hệ thống của chúng tôi nên bài viết của bạn hiện chưa được đăng .
+										Xin vui lòng thử lại hoặc báo cho bộ phân kĩ thuật .Chúng tôi rất xin lỗi vì sự phiền phức này .</div>";
+								$this->registry->template->message_status=$message_status;
+							}
+						}
+					}
+					if(isset($_POST['save_stt'])){
+						if(isset($_POST['edit_content']) && !empty($_POST['edit_content'])){
+							$content=$_POST['edit_content'];
+							if(!$this->statusModel->edit($content,$_POST['save_stt'])){
+								$message_status="<div class='alert alert-warning'>Có lỗi xảy ra do hệ thống của chúng tôi nên bài viết của bạn hiện chưa được sửa .
+											Xin vui lòng thử lại hoặc báo cho bộ phân kĩ thuật .Chúng tôi rất xin lỗi vì sự phiền phức này .</div>";
+								$this->registry->template->message_status=$message_status;
+							}
+						}
+					}
+					$this->registry->template->num_notice=$this->usersModel->count_notice($_SESSION['id']);
+				}
+				$this->registry->template->status=$this->statusModel->get_status_user($id);
+				$this->registry->template->my_class=$this->classModel->getClassByUserId($id);
+				$this->registry->template->vaitro=$this->usersModel->getLevel($id);
 				$this->registry->template->users=$this->usersModel->getUsers($id);
 				$this->registry->template->menu=$this->usersModel->getMenu();
 				$this->registry->template->show("users/index");
@@ -20,12 +62,13 @@
 			}
 		}
 		public function info(){
-			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1)) && isset($_SESSION['id'])){
 				$users=array();
 				$users_temp=array();
 				$errors=array();
-				$this->usersModel=new usersModel();
-				$this->check_ajaxModel=new check_ajaxModel();
+				$this->usersModel		=new usersModel();
+				$this->check_ajaxModel	=new check_ajaxModel();
+				$this->classModel		=new classModel();
 				$id=$_GET['id'];
 				$users['id']=$id;
 				$users_temp=$this->usersModel->getUsers($id);
@@ -71,7 +114,7 @@
 
 							}
 						}else{
-							$errors[]="avatar";
+							$users['avatar']="default.jpg";
 						}
 					}else{
 						$users['avatar']=$users_temp['avatar'];;
@@ -100,7 +143,10 @@
 					}
 					$this->registry->template->errors=$errors;
 				}
+				$this->registry->template->my_class=$this->classModel->getClassByUserId($_SESSION['id']);
+				$this->registry->template->vaitro=$this->usersModel->getLevel($id);
 				$this->registry->template->menu=$this->usersModel->getMenu();
+				$this->registry->template->num_notice=$this->usersModel->count_notice($_SESSION['id']);
 				$this->registry->template->title="Info";
 				$this->registry->template->show('users/info/index');
 			}else{
@@ -108,10 +154,12 @@
 			}
 		}
 		public function gallery(){
-			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1)) && isset($_SESSION['id'])){
 				$this->usersModel=new usersModel();
+				$this->classModel=new classModel();
 				$users=array();
 				$users['id']=$_GET['id'];
+				$id=$_GET['id'];
 				if($_SERVER['REQUEST_METHOD']=="POST"){
 					if(isset($_POST['select']) &&filter_var($_POST['select'],FILTER_VALIDATE_INT,array('min_range'=>1))){
 						if($_POST['select']==1){
@@ -143,24 +191,53 @@
 						$this->registry->template->message=$message;
 					}
 				}
+				$this->registry->template->my_class=$this->classModel->getClassByUserId($_SESSION['id']);
+				$this->registry->template->vaitro=$this->usersModel->getLevel($id);
 				$this->registry->template->gallery_num=$this->usersModel->get_gallery_num($users['id']);
 				$this->registry->template->gallery=$this->usersModel->getGallery($users['id']);
 				$this->registry->template->users=$this->usersModel->getUsers($users['id']);
 				$this->registry->template->menu=$this->usersModel->getMenu();
+				$this->registry->template->num_notice=$this->usersModel->count_notice($_SESSION['id']);
 				$this->registry->template->title="Info";
 				$this->registry->template->show('users/gallery/index');
 			}else{
 				redirect_to();
 			}
 		}
-		public function history(){
-			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
-				$this->usersModel=new usersModel();
+		public function favorites(){
+			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1)) && isset($_SESSION['id'])){
+				$this->usersModel		=new usersModel();
+				$this->classModel		=new classModel();
+				$this->favoriteModel	=new favoriteModel();
 				$users=array();
 				$users['id']=$_GET['id'];
+				$id=$_GET['id'];
+				$this->registry->template->my_class=$this->classModel->getClassByUserId($_SESSION['id']);
+				$this->registry->template->vaitro=$this->usersModel->getLevel($id);
+				// $this->registry->template->history=$this->usersModel->getHistory($users['id']);
+				$this->registry->template->favorite=$this->favoriteModel->get_favorite($users['id']);
+				$this->registry->template->users=$this->usersModel->getUsers($users['id']);
+				$this->registry->template->menu=$this->usersModel->getMenu();
+				$this->registry->template->num_notice=$this->usersModel->count_notice($_SESSION['id']);
+				$this->registry->template->title="Favorites";
+				$this->registry->template->show('users/favorites/index');
+			}else{
+				redirect_to();
+			}
+		}
+		public function history(){
+			if(isset($_GET['id']) && filter_var($_GET['id'],FILTER_VALIDATE_INT,array('min_range'=>1)) && isset($_SESSION['id'])){
+				$this->usersModel=new usersModel();
+				$this->classModel=new classModel();
+				$users=array();
+				$users['id']=$_GET['id'];
+				$id=$_GET['id'];
+				$this->registry->template->my_class=$this->classModel->getClassByUserId($_SESSION['id']);
+				$this->registry->template->vaitro=$this->usersModel->getLevel($id);
 				$this->registry->template->history=$this->usersModel->getHistory($users['id']);
 				$this->registry->template->users=$this->usersModel->getUsers($users['id']);
 				$this->registry->template->menu=$this->usersModel->getMenu();
+				$this->registry->template->num_notice=$this->usersModel->count_notice($_SESSION['id']);
 				$this->registry->template->title="History";
 				$this->registry->template->show('users/history/index');
 			}else{

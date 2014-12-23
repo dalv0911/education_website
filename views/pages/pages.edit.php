@@ -12,7 +12,14 @@
 			if(isset($message)){
 				echo $message;
 			}
-		?>	
+	$i=0;
+	$temp=array();
+	while(!empty($tags[$i]['name']) && isset($tags[$i]['name'])){
+		$temp[$i]=$tags[$i]['name'];
+		$i++;
+	}
+	$pages['tags']=implode(",",$temp);
+?>	
 		<div class="panel panel-success">
 			<div class="panel-heading">
 				<h3 class="panel-title">Sửa bài viết</h3>
@@ -82,8 +89,8 @@
 					</div>
 					<div>
 						<label></label>
-						<textarea class="form-control" row="3" name="meta" placeholder="Meta bài viết "><?php
-								echo isset($_POST['meta'])?$_POST['meta']:$pages['meta'];?></textarea><br>
+						<textarea class="form-control" row="3" name="tags" placeholder="Meta bài viết "><?php
+								echo isset($_POST['tags'])?$_POST['tags']:$pages['tags'];?></textarea><br>
 					</div>
 					<div class="col-lg-3">
 						<button type="submit" class="btn btn-default btn-success" name="submit">Sửa Bài Viết</button>

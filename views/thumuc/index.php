@@ -30,7 +30,7 @@
                             }
                         ?>
             			<?php
-            				if(isset($_SESSION['level']) && $_SESSION['level']==3){
+            				if(isset($_SESSION['level']) && $_SESSION['level']>=4){
             					echo '<tr>
                                         <li class="dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span></a>
@@ -51,7 +51,7 @@
             			 	while(!empty($thumuc2[$i])){
             			 		echo "<tr>";
             			 			echo"<td><a href='?rt=thumuc2&id=".$thumuc2[$i]['id']."'>".$thumuc2[$i]['name']."</a></td>";
-            			 			if(isset($_SESSION['level']) && $_SESSION['level']==3){
+            			 			if(isset($_SESSION['level']) && $_SESSION['level']>=4){
 	            						echo "<td><a href='?rt=thumuc2/edit&id={$thumuc2[$i]["id"]}' title='Sửa'><span class='glyphicon glyphicon-edit'></span</a></td>
 	            							<td><a href='?rt=thumuc2/delete&id={$thumuc2[$i]["id"]}' title='Xóa'><span class='glyphicon glyphicon-trash'></span</a></td>
 	            							";
@@ -59,17 +59,39 @@
             			 		echo "</tr>";
             			 		$i++;
             			 	}
-                            $i=0;
+                           $i=0;
+                            echo'<div class="list-group">';
                             while(!empty($pages[$i])){
-                                echo "<tr>";
-                                    echo"<td><a href='?rt=pages&id=".$pages[$i]['id']."'>".$pages[$i]['name']."</a></td>";
-                                echo "</tr>";
-                                $i++;
+                                echo'<div class="list-group-item">
+                                    <div class="row" style="padding-left:20px;"><a href="?rt=pages&id='.$pages[$i]['id'].'"><span style="font-size:20px;font-weight:bold;">'.$pages[$i]['name'].'</span></a></div>
+                                        <div class="row">
+                                            <div class="col-lg-3"><img src="upload/images/thumb_'.$pages[$i]['image_icon'].'"></div>
+                                            <div class="col-lg-9">
+                                                <p>'.$pages[$i]['des'].'</p>
+                                            <span>Vào lúc :<i style="font-size:12px;">'.$pages[$i]['time_on'].'</i> </span>
+                                            <span>- Bởi :<a href="?rt=users&id='.$pages[$i]['author_id'].'"><i style="font-weight:bold;"> '.$pages[$i]['user_name'].'</i></a></span>
+                                        </div>
+                                    </div>
+                                    </div>';
+                                 $i++;
                             }
+                            echo'</div>';
             			 ?>
             		</tbody>
             	</table>
             </div>
+            <?php
+                $i=0;
+                if($num_tm2>5){
+                    echo'<div class="phantrang">';
+                    for($i=0;$i<ceil($num_tm2/10);$i++){
+                        echo'
+                        <span><a href="?rt=thumuc&id='.$thumuc['id'].'&s='.$i.'">'.$i.'</a></span>
+                        ';
+                    }
+                    echo'</div>';
+                }
+            ?>
         </div>
     </div>
 

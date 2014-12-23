@@ -11,6 +11,7 @@ class indexController extends Controller{
 		if(isset($_SESSION['id'])){
 			$this->registry->template->num_notice=$this->indexModel->count_notice($_SESSION['id']);
 		}
+		$this->registry->template->pages=$this->indexModel->getPages();
 		$this->registry->template->menu=$this->indexModel->getMenu();
 		$this->registry->template->users=$this->indexModel->getNewUsers();
 		$this->registry->template->show('index');

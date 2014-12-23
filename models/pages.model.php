@@ -117,7 +117,7 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="UPDATE pages SET name=?,title=?,content=?,url=?,des=?,keyword=?,image_icon=?,mp3=?,author_id=?,time_on=NOW()";
+			$sql="UPDATE pages SET name=?,title=?,content=?,url=?,des=?,keyword=?,image_icon=?,mp3=?,author_id=?,time_on=NOW() WHERE id=?";
 			$stmt=self::$conn->prepare($sql);
 
 			$stmt->bindParam(1,$name);
@@ -129,7 +129,7 @@
 			$stmt->bindParam(7,$image_icon);
 			$stmt->bindParam(8,$mp3);
 			$stmt->bindParam(9,$author_id);
-
+			$stmt->bindParam(10,$id);
 			$name=$pages['name'];
 			$title=$pages['title'];
 			$content=$pages['content'];
@@ -139,7 +139,7 @@
 			$image_icon=$pages['image_icon'];
 			$author_id=$pages['author_id'];
 			$mp3=$pages['mp3'];
-
+			$id=$pages['id'];
 			if($stmt->execute()){
 				return true;
 			}else{
@@ -259,7 +259,7 @@
 			$sql="SELECT 
 							CONCAT_WS(' ',first_name,last_name) AS user_name,
 							p.id,name,title,url,content,p.des,keyword,
-							image_icon,p.time_on,mp3
+							image_icon,p.time_on,mp3,author_id
 					FROM pages AS p 
 					LEFT JOIN users AS u
 						ON u.id=p.author_id
@@ -430,5 +430,27 @@
 			return $tags;
 		}
 		// ==============================TAG =====================================
+		public function get_pages_around($id){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT p.id,p.name,p.des,p.image_icon
+					FROM pages AS p
+					LEFT JOIN users AS u
+						ON u.id=p.author_id
+					WHERE p.id<? limit 3
+					";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$id);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$pages=array(array());
+			$i=0;
+			while($row=$stmt->fetch()){
+				$pages[$i++]=$row;
+			}
+			$i--;
+			return $pages;
+		}
 	}
 ?>

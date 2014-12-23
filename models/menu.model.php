@@ -46,9 +46,12 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT p.id,p.name 
-					FROM pages AS p LEFT JOIN page_menu AS pmn
+			$sql="SELECT p.id,p.name,p.des,p.image_icon,p.des,p.time_on,CONCAT_WS(' ',first_name,last_name) AS user_name,p.author_id
+					FROM pages AS p 
+					LEFT JOIN page_menu AS pmn
 						ON p.id=pmn.page_id 
+					LEFT JOIN users AS u
+						ON u.id=p.author_id
 					WHERE pmn.menu_id =?";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$menu_id);
