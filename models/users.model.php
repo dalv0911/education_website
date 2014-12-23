@@ -6,7 +6,7 @@
 				self::$conn=$this->connect_pdo();
 			}
 			$sql="SELECT id,first_name,last_name,CONCAT_WS(' ',first_name,last_name) AS name,email,level,username,
-						gender,des,address,state,sign,time_on,avatar
+						gender,des,address,state,sign,time_on,avatar,score
 					FROM users
 					WHERE id=?";
 			$stmt=self::$conn->prepare($sql);
@@ -182,5 +182,22 @@
 			$i--;
 			return $history;
 		}
+		public function getLevel($id){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT vaitro 
+					FROM users AS u
+					LEFT JOIN level AS l
+						ON l.level=u.level
+					WHERE u.id=?";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$id);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$users=$stmt->fetch();
+			return $users['vaitro'];
+		}
+		
 	}
 ?>
