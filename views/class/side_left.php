@@ -27,5 +27,12 @@
 	    </div>
 	    
 	</div>
+	<div>
+		<?php
+		echo'
+		<a href="?rt=logout/classs&id='.$class['id'].'"><button class="btn btn-lg btn-danger" id="logout_class">Thoát lớp học</button></a>
+		';
+		?>
+	</div>
 </div>
 <div class="col-lg-6">

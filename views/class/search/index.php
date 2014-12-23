@@ -2,7 +2,6 @@
     include'views/header.php';
     include'views/users/side_left.php';
 ?>
-<div class="col-lg-6">
 <div class="panel panel-success">
     <div class="panel-heading"><strong>Danh sách các lớp học hiện đang hoạt động trên website .</strong></div>
     <div class="panel-body">
@@ -19,10 +18,10 @@
                 ';
                 $i++;
             }
-        ?>
+        ?>  
     </div>
 </div>
-</div>
 <?php
+    include'views/users/side_right.php';
     include'views/footer.php';
 ?>
