@@ -115,6 +115,23 @@ $(document).ready(function(){
 			}
 		});
 	});
+	$('.email_users_edit').change(function(){
+		var email=$(this).val();
+		var id=$(this).attr('id');
+		$('#ajax_notify').html('<span>Checking availability ...</span>');
+		$.ajax({
+			type:"get",
+			url:"?rt=check_ajax/email_users_edit",
+			data:{email:email,id:id},
+			success:function(respone){
+				if(respone=="YES"){
+					$('#ajax_notify').html('<span style="color:#5cb85c;font-weight:bold;">Bạn có thể sử dụng tên này .</span>');
+				}else if(respone=="NO"){
+					$('#ajax_notify').html('<span style="color:red;font-weight:bold;">Tên này đã tồn tại .</span>');
+				}
+			}
+		});
+	});
 	$('#username').change(function(){
 		var username=$(this).val();
 		$('#ajax_notify').html('<span>Checking availability ...</span>');

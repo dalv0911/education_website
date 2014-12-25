@@ -5,6 +5,11 @@
 		header("Location:$url");
 		exit(1);
 	}
+	function redirect_to_login($page="?rt=login&key=1"){
+		$url=BASE_URL.$page;
+		header("Location:$url");
+		exit(1);
+	}
 	function vn2latin($cs, $tolower = false)
 		{
 		/*Mảng chứa tất cả ký tự có dấu trong Tiếng Việt*/
