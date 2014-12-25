@@ -33,6 +33,7 @@
 						// End load menubar
 						$this->registry->template->title="Tìm kiếm ".$keyword;
 						$this->registry->template->users=$this->searchModel->getNewUsers();
+						$this->registry->template->top_class=$this->searchModel->get_top_class();
 						$this->registry->template->show("search/index");
 					}
 				}

@@ -55,6 +55,7 @@
 				// End load menubar
 				$this->registry->template->title=$pages['title'];
 				$this->registry->template->users=$this->pagesModel->getNewUsers();
+				$this->registry->template->top_class=$this->pagesModel->get_top_class();
 				$this->registry->template->show("pages/index");
 			}else{
 				redirect_to();
@@ -209,6 +210,7 @@
 				$this->registry->template->num_notice=$this->pagesModel->count_notice($_SESSION['id']);
 				// End load menubar
 				$this->registry->template->users=$this->pagesModel->getNewUsers();
+				$this->registry->template->top_class=$this->pagesModel->get_top_class();
 				$this->registry->template->show('pages/pages.create');
 			}else{
 				redirect_to("");
@@ -395,6 +397,7 @@
 					$this->registry->template->num_notice=$this->pagesModel->count_notice($_SESSION['id']);
 					// End load menubar
 					$this->registry->template->users=$this->pagesModel->getNewUsers();
+					$this->registry->template->top_class=$this->pagesModel->get_top_class();
 					$this->registry->template->show('pages/pages.edit');
 				}else{
 					redirect_to("error404");
@@ -439,6 +442,7 @@
 				$this->registry->template->num_notice=$this->pagesModel->count_notice($_SESSION['id']);
 				// End load menubar
 				$this->registry->template->users=$this->pagesModel->getNewUsers();
+				$this->registry->template->top_class=$this->pagesModel->get_top_class();
 				$this->registry->template->show('pages/pages.delete');
 			}else{
 				redirect_to();

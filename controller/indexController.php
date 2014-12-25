@@ -14,6 +14,7 @@ class indexController extends Controller{
 		$this->registry->template->pages=$this->indexModel->getPages();
 		$this->registry->template->menu=$this->indexModel->getMenu();
 		$this->registry->template->users=$this->indexModel->getNewUsers();
+		$this->registry->template->top_class=$this->indexModel->get_top_class();
 		$this->registry->template->show('index');
 	}
 }

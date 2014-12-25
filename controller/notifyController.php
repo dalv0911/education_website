@@ -16,14 +16,6 @@
 				$this->classModel	=new classModel();
 				$notice=array(array());
 				$notice=$this->notifyModel->getNotify($_SESSION['id']);
-				$i=0;
-				while(isset($notice[$i]['id']) && !empty($notice[$i]['id'])){
-					if($this->notifyModel->viewed($notice[$i]['id'])){
-						$i++;
-					}else{
-						break;
-					}
-				}
 				$this->registry->template->notice=$notice;
 				$this->registry->template->my_class=$this->classModel->getClassByUserId($_SESSION['id']);
 				$this->registry->template->vaitro=$this->usersModel->getLevel($_SESSION['id']);

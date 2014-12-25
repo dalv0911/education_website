@@ -21,6 +21,12 @@
 				$this->statusModel	=new statusModel();
 				$class=array();
 				$class=$this->classModel->getClassById($_GET['id']);
+				if(isset($_GET['s']) && filter_var($_GET['s'],FILTER_VALIDATE_INT,array('min_range'=>1))){
+					$s=$_GET['s'];
+				}else{
+					$s=0;
+				}
+				$current=$s*4;
 				if(isset($_SESSION['id'])){
 					if($this->classModel->is_user($_SESSION['id'],$_GET['id']) || $this->notifyModel->is_sent($_SESSION['id'],$_GET['id']) || $_SESSION['id']==$class['giao_vien_id']){
 						$this->registry->template->joined="yes";
@@ -84,9 +90,10 @@
 				if(isset($_SESSION['id'])){
 					$this->registry->template->num_notice=$this->classModel->count_notice($_SESSION['id']);
 				}
+				$this->registry->template->num_stt=$this->statusModel->get_num_status($_GET['id']);
 				$class['num_users']=$this->classModel->count_users($_GET['id']);
 				$this->registry->template->class=$class;
-				$this->registry->template->status=$this->statusModel->get_status_class($_GET['id']);
+				$this->registry->template->status=$this->statusModel->get_status_class($_GET['id'],$current);
 				$this->registry->template->menu=$this->classModel->getMenu();
 				$this->registry->template->users=$this->classModel->getUsersByClass($_GET['id']);
 				$this->registry->template->title=$class['name'];
@@ -159,7 +166,7 @@
 				$this->registry->template->title="Lớp học của bạn";
 				$this->registry->template->show("class/manage/class.list");
 			}else{
-				redirect_to();
+				redirect_to_login();
 			}
 		}
 		public function search(){
@@ -176,7 +183,7 @@
 				$this->registry->template->title="Tìm kiếm lớp học";
 				$this->registry->template->show("class/search/index");
 			}else{
-				redirect_to();
+				redirect_to_login();
 			}
 		}
 		public function create(){

@@ -11,7 +11,10 @@ body {
     /*background-color: #F0F0F0;*/
     background-image: url('../../upload/images/line_background.jpg');
 }
-
+.banner{
+    background-image: url('../../upload/images/bannerl2015.jpg');
+    background-repeat: no-repeat;
+}
 @media(min-width:768px) {
     body {
         margin-top: 50px;

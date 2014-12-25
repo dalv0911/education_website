@@ -21,6 +21,7 @@
 				// End load menubar
 				$this->registry->template->BreadCrumb=$this->thumuc2Model->getBreadCrumb($thumuc2_id);
 				$this->registry->template->users=$this->thumuc2Model->getNewUsers();
+				$this->registry->template->top_class=$this->thumuc2Model->get_top_class();
 				$this->registry->template->show("thumuc2/index");
 			}else{
 				redirect_to();
@@ -70,6 +71,7 @@
 				$this->registry->template->max_position=$this->thumuc2Model->getPosition();
 				$this->registry->template->title="Tạo mới thư mục DA-MVC";
 				$this->registry->template->users=$this->thumuc2Model->getNewUsers();
+				$this->registry->template->top_class=$this->thumuc2Model->get_top_class();
 				$this->registry->template->show('thumuc2/thumuc2.create');
 			}else{
 				redirect_to();
@@ -126,6 +128,7 @@
 				$this->registry->template->max_position=$this->thumuc2Model->getPosition();
 				$this->registry->template->title="Sửa thư mục DA-MVC";
 				$this->registry->template->users=$this->thumuc2Model->getNewUsers();
+				$this->registry->template->top_class=$this->thumuc2Model->get_top_class();
 				$this->registry->template->show('thumuc2/thumuc2.edit');
 			}else{
 				redirect_to();
@@ -167,6 +170,7 @@
 				$this->registry->template->num_notice=$this->thumuc2Model->count_notice($_SESSION['id']);
 				// End load menubar
 				$this->registry->template->users=$this->thumuc2Model->getNewUsers();
+				$this->registry->template->top_class=$this->thumuc2Model->get_top_class();
 				$this->registry->template->show('thumuc2/thumuc2.delete');
 			}else{
 				redirect_to();

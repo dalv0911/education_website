@@ -80,6 +80,18 @@
 				}
 			}
 		}
+		public function email_users_edit(){
+			$this->check_ajaxModel=new check_ajaxModel();
+			if(isset($_GET['email'],$_GET['id'])){
+				$email=$_GET['email'];
+				$id=$_GET['id'];
+				if($this->check_ajaxModel->check_email_users($email,$id)){
+					echo "NO";
+				}else{
+					echo "YES";
+				}
+			}
+		}
 		public function username(){
 			$this->check_ajaxModel=new check_ajaxModel();
 			if(isset($_GET['username'])){
@@ -149,16 +161,6 @@
 			$this->check_ajaxModel	=new check_ajaxModel();
 			if(isset($_POST['id']) && filter_var($_POST['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
 				if($this->check_ajaxModel->reject_notify($_POST['id'])){
-					return true;
-				}else{
-					return false;
-				}
-			}
-		}
-		public function hide_notify(){
-			$this->notifyModel	=new notifyModel();
-			if(isset($_POST['id']) && filter_var($_POST['id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
-				if($this->notifyModel->hide($_POST['id'])){
 					return true;
 				}else{
 					return false;

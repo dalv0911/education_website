@@ -18,6 +18,7 @@
 				// End load menubar
 				$this->registry->template->title="Bài viết theo tác giả";
 				$this->registry->template->users=$this->authorModel->getNewUsers();
+				$this->registry->template->top_class=$this->authorModel->get_top_class();
 				$this->registry->template->show("users/author/index");
 			}else{
 				redirect_to();

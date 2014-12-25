@@ -20,6 +20,7 @@
 				$this->registry->template->menu=$this->menuModel->getMenu();
 				// End load menubar
 				$this->registry->template->users=$this->menuModel->getNewUsers();
+				$this->registry->template->top_class=$this->menuModel->get_top_class();
 				$this->registry->template->show("menu/index");
 			}else{
 				redirect_to();

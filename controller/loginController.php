@@ -59,6 +59,7 @@
 			$this->registry->template->title='Login - Da CMS';
 			$this->registry->template->menu=$this->loginModel->getMenu();
 			$this->registry->template->users=$this->loginModel->getNewUsers();
+			$this->registry->template->top_class=$this->loginModel->get_top_class();
 			$this->registry->template->show('users/users.login');
 		}
 	}

@@ -58,6 +58,7 @@
 			$this->registry->template->title="Registry";
 			$this->registry->template->menu=$this->registerModel->getMenu();
 			$this->registry->template->users=$this->registerModel->getNewUsers();
+			$this->registry->template->top_class=$this->registerModel->get_top_class();
 			$this->registry->template->show("users/users.register");
 		}
 	}

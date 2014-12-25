@@ -6,8 +6,8 @@
 	class kiemtraController extends Controller{
 		private $kiemtraModel=null;
 		public function index(){
-			if(!isset($_SESSION['id']) || $_SESSION['level']<2){
-				redirect_to();
+			if(!isset($_SESSION['id']) || $_SESSION['level']<1){
+				redirect_to_login();
 			}
 			$this->kiemtraModel	=new kiemtraModel();
 			$this->registry->template->danhsachdethi=$this->kiemtraModel->get_dethi_all();
@@ -124,7 +124,7 @@
 			
 		}
 		public function question(){
-			if(!isset($_SESSION['id']) || $_SESSION['level']<2){
+			if(!isset($_SESSION['id']) || $_SESSION['level']<1){
 				redirect_to();
 			}
 			if(isset($_GET['dethi_id']) && filter_var($_GET['dethi_id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
@@ -133,6 +133,10 @@
 					$question=array();
 					$test=array();
 					$question=$this->kiemtraModel->get_question_by_stt($_GET['dethi_id'],$_GET['stt']);
+
+					$this->registry->template->so_nguoi_dung=$this->kiemtraModel->so_nguoi_dung($_GET['dethi_id'],$_GET['stt']);
+					$this->registry->template->so_nguoi_sai=$this->kiemtraModel->so_nguoi_sai($_GET['dethi_id'],$_GET['stt']);
+					
 					$this->registry->template->question=$question;
 					$this->registry->template->dapan=$this->kiemtraModel->get_dapan($question['id']);
 					if($this->kiemtraModel->tested($_GET['dethi_id'],$_GET['stt'],$_SESSION['id'])){
@@ -187,7 +191,7 @@
 			}
 		}
 		public function nopbai(){
-			if(!isset($_SESSION['id']) || $_SESSION['level']<2){
+			if(!isset($_SESSION['id']) || $_SESSION['level']<1){
 				redirect_to();
 			}
 			if(isset($_GET['dethi_id']) && filter_var($_GET['dethi_id'],FILTER_VALIDATE_INT,array('min_range'=>1))){
