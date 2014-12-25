@@ -14,7 +14,7 @@
 				?>
 				<div class="panel panel-success">
 					<div class="panel-heading">
-						<h3 class="panel-title">Login</h3>
+						<h3 class="panel-title">Bạn cần đăng nhập để có thể sử dụng các chức năng nâng cao của website .</h3>
 					</div>
 					<div class="panel-body">
 						<form method="post">

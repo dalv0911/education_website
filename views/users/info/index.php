@@ -31,7 +31,7 @@
 				</div><br>
 				<div>
 					<label class="col-lg-3">Email</label>
-					<input type="text" placeholder="Your Email" name="email" id="email_users"
+					<input type="text" placeholder="Your Email" name="email" id="<?php echo $users['id'];?>"class="email_users_edit"
 							value="<?php echo isset($_POST['email'])?$_POST['email']:$users['email'];?>">
 					<i id="ajax_notify"></i>
 				</div><br>

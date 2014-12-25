@@ -64,7 +64,6 @@
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php 
-                            if(isset($num_notice) && $num_notice>0) echo ' <span style="color:#108917;font-weight:bold;font-size:20px;"> '.$num_notice.'</span>';
                             if(isset($_SESSION['username'])) echo '<span style="font-weight:bold;color:red;">'.$_SESSION['username'].'</span>';
                                     ?><b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -72,8 +71,8 @@
                          <?php echo'<a href="?rt=users&id='.$_SESSION['id'].'"><i class="fa fa-fw fa-user"></i> Profile</a>';?>
                         </li>
                         <li>
-                            <a href="?rt=notify"><i class="glyphicon glyphicon-bell"></i> Notice <?php 
-                                    if(isset($num_notice) && $num_notice>0) echo '<span style="color:#108917;font-weight:bold;font-size:20px;">'.$num_notice.'</span>';?></a>
+                            <a href="?rt=notify"><i class="glyphicon glyphicon-bell"></i> Notice
+                                    </a>
                         </li>
                         <li>
                             <a href="<?php echo '?rt=users/info&id='.$_SESSION['id'].'';?>"><i class="fa fa-fw fa-gear"></i> Settings</a>
@@ -105,18 +104,32 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="?rt=index">DA MVC</a>
+                    <a class="navbar-brand" href="?rt=index"><i class="glyphicon glyphicon-home"></i></a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <?php
                             $i=0;
                             while(!empty($menu[$i])){
+                                if($menu[$i]['id']==5){
+                                    echo '
+                                    <li>
+                                        <a href="?rt=class/search" >'.$menu[$i]['name'].'</a>
+                                    </li>
+                                    ';
+                                }elseif($menu[$i]['id']==10 ){
+                                    echo '
+                                    <li>
+                                        <a href="?rt=kiemtra" >'.$menu[$i]['name'].'</a>
+                                    </li>
+                                    ';
+                                }else
                                 echo '
                                     <li>
                                         <a href="?rt=menu&id='.$menu[$i]['id'].'" >'.$menu[$i]['name'].'</a>
                                     </li>
                                 ';
+                                
                                 $i++;
                             }
                         ?>
@@ -128,7 +141,7 @@
         </div>
         <div class="row">
             <div class="banner">
-                <img src="upload/images/bannerl2015.jpg" alt="Education webstie">
+                <img src="upload/images/bannerl2015.jpg" class="img-responsive"alt="Education webstie">
             </div>
         </div>
         <div class="row">

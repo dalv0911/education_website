@@ -37,8 +37,6 @@
 		    	<p class="list-group-item active">Quản lý tài khoản</p>
 		    	<a href="?rt=users/info&id='.$users['id'].'" class="list-group-item"><i class="glyphicon glyphicon-link"></i> Thông tin tài khoản</a>
 		    	<a href="?rt=users/gallery&id='.$users['id'].'" class="list-group-item"><i class="glyphicon glyphicon-user"></i> Thay đổi hình đại diện</a>
-		    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-edit"></i> Thay đổi chữ ký</a>
-		    	<a href="" class="list-group-item"><i class="glyphicon glyphicon-cog"></i> Thay đổi mật khẩu</a>
 	    </div><br>';
 		?>
 	</div>

@@ -76,6 +76,23 @@
         }
     ?>
     <?php
+        
+        if(!empty($num_stt) && $num_stt>4){
+            echo'<div class="panel panel-success">
+            <div class="panel-body">
+            ';
+            $i=0;
+            for($i=0;$i<$num_stt/4;$i++){
+                echo'<span><a href="?rt=class&id='.$class['id'].'&s='.$i.'"> '.$i.'</a></span>';
+            }
+            echo'
+            </div>
+            </div>
+        ';
+        }
+        
+    ?>
+    <?php
         include'views/class/side_right.php';
         include'views/footer.php';
     ?>

@@ -26,14 +26,13 @@
 						<i>'.$notice[$i]['time_on'].'</i>'
 
 					;
-					if($notice[$i]['type_id']==1){
+					if($notice[$i]['type_id']==1 && $notice[$i]['id_to']==$_SESSION['id']){
 						echo '
 							<a class="accept" id='.$notice[$i]['id'].' title="Accept"><i class="glyphicon glyphicon-ok"></i></a>
 							<a class="reject" id='.$notice[$i]['id'].' title="Reject"><i class="glyphicon glyphicon-remove"></i></a>
 						';
-					}else if($notice[$i]['type_id']>=2){
+					}else if($notice[$i]['type_id']>=2 && $notice[$i]['id_to']==$_SESSION['id']){
 						echo'
-							<a class="hide_notify" id='.$notice[$i]['id'].' title="Hide"><i class="glyphicon glyphicon-eye-close"></i></a>
 							<a class="del_notify" id='.$notice[$i]['id'].' title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
 						';
 					}

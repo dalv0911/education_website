@@ -11,6 +11,7 @@
         <script type="text/javascript" src="bootstrap/js/jquery-1.11.0.js"></script>
         <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
         <script type="text/javascript" src="js/kiemtra.js"></script>
+        <script type="text/javascript" src="js/check_ajax.js"></script>
         <!-- Bootstrap Core JavaScript -->
         <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 
@@ -54,3 +55,8 @@
     </head>
     <body>
         <div class="col-lg-10 col-lg-offset-1">
+            <div class="row">
+                <!-- <div class="col-lg-10 col-lg-offset-1">
+                    <img src="upload/images/kiemtra_banner.jpg" class="img-responsive">
+                </div> -->
+            </div>

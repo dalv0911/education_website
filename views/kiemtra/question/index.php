@@ -10,7 +10,14 @@
 			<div class="panel-heading">Bạn đang làm đề thi '.$dethi['name'].' </div>
 			<div class="panel-body">
 				<span>'.$question['stt'].'.</span>
-				<span style="color:red;"> -- '.$question['score'].' Điểm</span>
+				<span style="color:red;"> -- '.$question['score'].' Điểm</span><br>';
+				if(isset($so_nguoi_dung) && !empty($so_nguoi_dung)){
+					echo'<span>Số người trả lời đúng :</span><span style="color:red;font-weight:bold;">'.$so_nguoi_dung.'</span><br>';		
+				}
+				if(isset($so_nguoi_sai) && !empty($so_nguoi_sai)){
+					echo'<span>Số người trả lời sai:</span><span style="color:red;font-weight:bold;">'.$so_nguoi_sai.'</span><br>';
+				}
+				echo'
 				<p>'.$question['question'].'</p>
 				<form method="post">';
 				$i=0;
