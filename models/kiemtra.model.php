@@ -1,4 +1,4 @@
-<?php
+x`x<?php
 	class kiemtraModel extends db{
 		private static $conn=null;
 		public function dethi_create($name,$socauhoi,$author_id){
@@ -386,6 +386,44 @@
 			}else{
 				return false;
 			}
+		}
+		public function so_nguoi_dung($dethi_id,$stt){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql=" SELECT dethi_id, stt, count(t.user_id) AS SoNguoiDung 
+					    FROM test as t 
+					    LEFT JOIN question AS q 
+					    ON q.id=t.question_id 
+					    WHERE dethi_id=? AND q.stt=? AND t.score<>0 
+					    GROUP BY dethi_id,stt 
+					    ";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$dethi_id);
+			$stmt->bindParam(2,$stt);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$result=$stmt->fetch();
+			return $result['SoNguoiDung'];
+		}
+		public function so_nguoi_sai($dethi_id,$stt){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql=" SELECT dethi_id, stt, count(t.user_id) as SoNguoiSai 
+					        FROM test as t 
+					        LEFT JOIN question AS q 
+					        ON q.id=t.question_id 
+					        WHERE dethi_id=? AND q.stt=? AND t.score=0 
+					        GROUP BY dethi_id, stt 
+					";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$dethi_id);
+			$stmt->bindParam(2,$stt);
+			$stmt->execute();
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$result=$stmt->fetch();
+			return $result['SoNguoiSai'];
 		}
 	}
 ?>

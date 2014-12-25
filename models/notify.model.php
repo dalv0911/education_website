@@ -51,7 +51,9 @@
 				self::$conn=$this->connect_pdo();
 			}
 			$sql="SELECT distinct n.id,id_from,id_to,id_class,c.name AS name_class,content,
-					CONCAT_WS(' ',u.first_name,u.last_name) AS name_from,CONCAT_WS(' ',u2.first_name,u2.last_name) AS name_to,type_id,n.time_on
+					CONCAT_WS(' ',u.first_name,u.last_name) AS name_from,
+					CONCAT_WS(' ',u2.first_name,u2.last_name) AS name_to,
+					type_id,n.time_on
 					FROM type_notify
 						LEFT JOIN notify AS n
 						ON type_notify.id=n.type_id
@@ -63,7 +65,7 @@
 						ON c.id=n.id_class
 						LEFT JOIN join_class AS jc
 						ON jc.class_id=n.id_class
-					WHERE jc.user_id=? OR id_to=? AND hide=0
+					WHERE jc.user_id=? OR id_to=?
 					ORDER BY n.time_on DESC";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$id_to);
@@ -78,19 +80,6 @@
 			$i--;
 			return $notice;
 		}
-		public function viewed($id){
-			if(empty(self::$conn)){
-				self::$conn=$this->connect_pdo();
-			}
-			$sql="UPDATE notify SET view=1 WHERE id=?";
-			$stmt=self::$conn->prepare($sql);
-			$stmt->bindParam(1,$id);
-			if($stmt->execute()){
-				return true;
-			}else{
-				return false;
-			}
-		}
 		public function getNotifyById($id){
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
@@ -102,19 +91,6 @@
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$row=$stmt->fetch();
 			return $row;
-		}
-		public function hide($id){
-			if(empty(self::$conn)){
-				self::$conn=$this->connect_pdo();
-			}
-			$sql="UPDATE notify SET hide=1 WHERE id=?";
-			$stmt=self::$conn->prepare($sql);
-			$stmt->bindParam(1,$id);
-			if($stmt->execute()){
-				return true;
-			}else{
-				return false;
-			}
 		}
 		
 	}

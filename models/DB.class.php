@@ -18,9 +18,9 @@
 			try{
 				$conn=new PDO('mysql:host=localhost;dbname=education_web',$this->db_user,$this->db_password,
 								array(PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES utf8"));
-				$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+				$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_SILENT);
 			}catch(PDOException $e){
-				echo "connected to database !";
+				echo "No connect to database !";
 				die($e->getMessage());
 			}
 			return $conn;

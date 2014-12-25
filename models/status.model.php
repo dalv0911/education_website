@@ -43,7 +43,7 @@
 				return false;
 			}
 		}
-		public function get_status_class($class_id){
+		public function get_status_class($class_id,$current){
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
@@ -52,7 +52,7 @@
 						LEFT JOIN users AS u
 						ON u.id=stt.user_id
 					WHERE class_id=?
-					ORDER BY stt.time_on DESC";
+					ORDER BY stt.time_on DESC LIMIT $current,4";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$class_id);
 			$stmt->execute();
@@ -102,6 +102,20 @@
 			}
 			$i--;
 			return $status;
+		}
+		public function get_num_status($class_id){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT count(id) AS num
+					FROM status 
+					WHERE class_id=?
+					GROUP BY class_id";
+			$stmt=self::$conn->prepare($sql);
+			$stmt->bindParam(1,$class_id);
+			$stmt->execute();
+			$num=$stmt->fetch();
+			return $num['num'];
 		}
 	}
 ?>

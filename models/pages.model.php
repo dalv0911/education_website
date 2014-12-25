@@ -438,7 +438,7 @@
 					FROM pages AS p
 					LEFT JOIN users AS u
 						ON u.id=p.author_id
-					WHERE p.id<? limit 3
+					WHERE p.id>? limit 3
 					";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$id);

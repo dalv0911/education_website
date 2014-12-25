@@ -6,7 +6,7 @@
 			if(empty(self::$conn)){
 				self::$conn=$this->connect_pdo();
 			}
-			$sql="SELECT id,name,position FROM menu ORDER BY position";
+			$sql="SELECT id,name,position FROM menu ORDER BY position DESC";
 			$stmt=self::$conn->query($sql);
 			$i=0;
 			$item=array(array());
@@ -22,7 +22,7 @@
 			}
 			$sql="SELECT id,CONCAT_WS(' ',first_name,last_name) AS name,username,email,avatar,time_on
 					FROM users 
-					ORDER BY time_on DESC limit 10";
+					ORDER BY time_on DESC limit 5";
 			$stmt=self::$conn->query($sql);
 			$i=0;
 			$users=array(array());
@@ -38,7 +38,7 @@
 			}
 			$sql="SELECT count('id') AS num_user
 					FROM notify
-					WHERE id_to=? AND view=0
+					WHERE id_to=?
 					GROUP BY id_to";
 			$stmt=self::$conn->prepare($sql);
 			$stmt->bindParam(1,$id_to);
@@ -47,6 +47,25 @@
 			$num=$stmt->fetch();
 			return $num['num_user'];
 		}
-		
+		public function get_top_class(){
+			if(empty(self::$conn)){
+				self::$conn=$this->connect_pdo();
+			}
+			$sql="SELECT c.id,c.name,count(jc.user_id) AS num_user
+					FROM class AS c
+					LEFT JOIN join_class AS jc
+						ON c.id=jc.class_id
+					GROUP BY c.id
+					ORDER BY count(jc.user_id) DESC limit 3
+					";
+			$stmt=self::$conn->query($sql);
+			$class=array(array());
+			$i=0;
+			while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+				$class[$i++]=$row;
+			}
+			$i--;
+			return $class;
+		}
 	}
 ?>
