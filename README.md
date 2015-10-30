@@ -1,5 +1,5 @@
 
-Website nhỏ cho việc học tiếng nhật hiệu quả hơn .
+Website nhỏ cho việc học tiếng nhật hiệu quả hơn.
 
 Cách cấu hình website .<br>
 1.Clone code về thư mục localhost của bạn - Xampp/wamp<br>
