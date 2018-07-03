@@ -8,4 +8,3 @@ Chú ý : Bạn nên đặt tên CSDL của bạn là "education_web" để khô
 3.Import file education_web.sql vào CSDL bạn vửa tạo .<br>
 4.Run .<br>
 5.Trang report chạy theo đường dẫn : BASE_SITE/?rt=report<br>
-Mọi chi tiết xin liên lạc với nhóm theo địa chỉ mail : dalv0911@gmail.com<br>
